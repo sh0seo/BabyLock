@@ -14,14 +14,24 @@ public class SwitchTileService extends TileService {
 
     private final static String TAG = SwitchTileService.class.getSimpleName();
 
-    public SwitchTileService() {
+    private IBinder binder;
+
+    private Tile tile;
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        if (binder == null) {
+            binder = new SwitchTileServiceBinder(this);
+        }
+        return binder;
     }
 
-//    @Override
-//    public IBinder onBind(Intent intent) {
-//        // TODO: Return the communication channel to the service.
-//        throw new UnsupportedOperationException("Not yet implemented");
-//    }
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        binder = new SwitchTileServiceBinder(this);
+    }
 
     @Override
     public void onClick() {
@@ -32,6 +42,8 @@ public class SwitchTileService extends TileService {
         if (state == Tile.STATE_INACTIVE) {
             getQsTile().setState(Tile.STATE_ACTIVE);
         } else if (state == Tile.STATE_ACTIVE) {
+            // TODO Show AdMob.
+            // TODO AdMob Success and be change inactive.
             getQsTile().setState(Tile.STATE_INACTIVE);
         }
 
@@ -52,6 +64,13 @@ public class SwitchTileService extends TileService {
         Log.d(TAG, "onStartListening()");
 
         updateTile();
+    }
+
+    public Tile getTile() {
+        if (tile == null) {
+            tile = getQsTile();
+        }
+        return tile;
     }
 
     private void updateTile() {

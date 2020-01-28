@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">NoTouch</string>
     <string name="baby_watch_mode">Baby Watching Mode</string>
+    <string name="accessibility_service_description">Test Test Test</string>
 </resources>
