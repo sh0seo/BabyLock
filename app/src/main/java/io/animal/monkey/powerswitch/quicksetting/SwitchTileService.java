@@ -9,45 +9,50 @@ import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
+import io.animal.monkey.util.SharedPref;
+
 @RequiresApi(api = Build.VERSION_CODES.N)
 public class SwitchTileService extends TileService {
 
     private final static String TAG = SwitchTileService.class.getSimpleName();
 
-    private IBinder binder;
+//    private IBinder binder;
 
     private Tile tile;
 
-    @Override
-    public IBinder onBind(Intent intent) {
-        if (binder == null) {
-            binder = new SwitchTileServiceBinder(this);
-        }
-        return binder;
-    }
+    private SharedPref sp;
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-
-        binder = new SwitchTileServiceBinder(this);
-    }
+//    @Override
+//    public IBinder onBind(Intent intent) {
+//        return getBinder();
+//    }
+//
+//    @Override
+//    public boolean onUnbind(Intent intent) {
+//        return super.onUnbind(intent);
+//    }
 
     @Override
     public void onClick() {
         super.onClick();
         Log.d(TAG, "onClick()");
 
-        int state = getQsTile().getState();
+        int state = getTile().getState();
         if (state == Tile.STATE_INACTIVE) {
-            getQsTile().setState(Tile.STATE_ACTIVE);
+            getTile().setState(Tile.STATE_ACTIVE);
+            getPref().setTileState(Tile.STATE_ACTIVE);
         } else if (state == Tile.STATE_ACTIVE) {
             // TODO Show AdMob.
             // TODO AdMob Success and be change inactive.
-            getQsTile().setState(Tile.STATE_INACTIVE);
+            getTile().setState(Tile.STATE_INACTIVE);
+            getPref().setTileState(Tile.STATE_INACTIVE);
+        } else if (state == Tile.STATE_UNAVAILABLE) {
+            // TODO Show permission Dialog.
+        } else {
+            throw new UnknownError("Tile Service State is " + state);
         }
 
-        getQsTile().updateTile();
+        getTile().updateTile();
     }
 
     @Override
@@ -66,12 +71,31 @@ public class SwitchTileService extends TileService {
         updateTile();
     }
 
-    public Tile getTile() {
+    private SharedPref getPref() {
+        if (sp == null) {
+           sp = new SharedPref(getApplication());
+        }
+
+        return sp;
+    }
+
+    private Tile getTile() {
         if (tile == null) {
             tile = getQsTile();
         }
         return tile;
     }
+
+//    public int getState() {
+//        return getTile().getState();
+//    }
+
+//    private IBinder getBinder() {
+//        if (binder == null) {
+//            binder = new SwitchTileServiceBinder(this);
+//        }
+//        return binder;
+//    }
 
     private void updateTile() {
         Tile tile = getQsTile();
@@ -80,6 +104,11 @@ public class SwitchTileService extends TileService {
 //            tile.setState(Tile.STATE_INACTIVE);
             tile.updateTile();
 //        }
+
+        // TODO check permission.
+        int state = tile.getState();
+        if (state != Tile.STATE_INACTIVE) {
+        }
     }
 
 }
