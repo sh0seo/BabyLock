@@ -9,6 +9,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <service
+            android:name=".powerswitch.quicksetting.SwitchTileService"
+            android:enabled="true"
+            android:exported="true"
+            android:label="@string/baby_watch_mode"
+            android:icon="@drawable/ic_child_care_black_24dp"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
