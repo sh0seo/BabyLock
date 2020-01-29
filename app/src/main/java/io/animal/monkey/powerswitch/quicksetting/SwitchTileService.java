@@ -1,12 +1,16 @@
 package io.animal.monkey.powerswitch.quicksetting;
 
+import android.content.Intent;
 import android.os.Build;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
+import io.animal.monkey.AdMobActivity;
+import io.animal.monkey.util.PermissionHelper;
 import io.animal.monkey.util.SharedPreferencesHelper;
 
 @RequiresApi(api = Build.VERSION_CODES.N)
@@ -19,6 +23,8 @@ public class SwitchTileService extends TileService {
     private Tile tile;
 
     private SharedPreferencesHelper sp;
+
+    private PermissionHelper permissionHelper;
 
 //    @Override
 //    public IBinder onBind(Intent intent) {
@@ -35,6 +41,13 @@ public class SwitchTileService extends TileService {
         super.onClick();
         Log.d(TAG, "onClick()");
 
+        boolean hasAccessibility = getPermissionHelper().isAccessibilitySettingsOn();
+        if (!hasAccessibility) {
+            // TODO Show permission Dialog.
+            Toast.makeText(getApplicationContext(), "not permission", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         int state = getTile().getState();
         if (state == Tile.STATE_INACTIVE) {
             getTile().setState(Tile.STATE_ACTIVE);
@@ -42,10 +55,14 @@ public class SwitchTileService extends TileService {
         } else if (state == Tile.STATE_ACTIVE) {
             // TODO Show AdMob.
             // TODO AdMob Success and be change inactive.
+            Intent intent = getAdMobActivityIntent();
+            startActivity(intent);
+
             getTile().setState(Tile.STATE_INACTIVE);
             getPref().setTileState(Tile.STATE_INACTIVE);
         } else if (state == Tile.STATE_UNAVAILABLE) {
             // TODO Show permission Dialog.
+            Toast.makeText(getApplicationContext(), "not permission", Toast.LENGTH_SHORT).show();
         } else {
             throw new UnknownError("Tile Service State is " + state);
         }
@@ -58,6 +75,10 @@ public class SwitchTileService extends TileService {
         super.onTileAdded();
         Log.d(TAG, "onTileAdded()");
 
+        // 초기화.
+        getTile().setState(Tile.STATE_INACTIVE);
+        getTile().updateTile();
+
         updateTile();
     }
 
@@ -67,6 +88,12 @@ public class SwitchTileService extends TileService {
         Log.d(TAG, "onStartListening()");
 
         updateTile();
+    }
+
+    @Override
+    public void onStopListening() {
+        super.onStopListening();
+        Log.d(TAG, "onStopListening()");
     }
 
     private SharedPreferencesHelper getPref() {
@@ -84,29 +111,27 @@ public class SwitchTileService extends TileService {
         return tile;
     }
 
-//    public int getState() {
-//        return getTile().getState();
-//    }
-
-//    private IBinder getBinder() {
-//        if (binder == null) {
-//            binder = new SwitchTileServiceBinder(this);
-//        }
-//        return binder;
-//    }
+    private Intent getAdMobActivityIntent() {
+        Intent intent = new Intent(getApplicationContext(), AdMobActivity.class);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        return intent;
+    }
 
     private void updateTile() {
-        Tile tile = getQsTile();
-//        int state = tile.getState();
-//        if (state != Tile.STATE_INACTIVE) {
-//            tile.setState(Tile.STATE_INACTIVE);
-            tile.updateTile();
-//        }
-
-        // TODO check permission.
-        int state = tile.getState();
-        if (state != Tile.STATE_INACTIVE) {
+        boolean hasAccessibility = getPermissionHelper().isAccessibilitySettingsOn();
+        if (!hasAccessibility) {
+            getTile().setState(Tile.STATE_INACTIVE);
+            getTile().updateTile();
+            return;
         }
+    }
+
+    private PermissionHelper getPermissionHelper() {
+        if (permissionHelper == null) {
+            permissionHelper = new PermissionHelper(this);
+        }
+
+        return permissionHelper;
     }
 
 }

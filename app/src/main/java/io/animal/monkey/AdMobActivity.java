@@ -5,7 +5,7 @@ import android.os.Bundle;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import io.animal.monkey.ui.main.MainFragment;
+import io.animal.monkey.ui.admob.AdMobFragment;
 
 public class AdMobActivity extends AppCompatActivity {
 
@@ -15,7 +15,7 @@ public class AdMobActivity extends AppCompatActivity {
         setContentView(R.layout.admob_activity);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.admob_container, MainFragment.newInstance())
+                    .replace(R.id.admob_container, AdMobFragment.newInstance())
                     .commitNow();
         }
     }

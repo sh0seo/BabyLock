@@ -7,14 +7,19 @@ import android.content.SharedPreferences;
 
 public class SharedPreferencesHelper extends ContextWrapper {
 
-    private final static String PREF_NAME = "pref";
+    public final static String KEY_TILE_STATE = "tile_state";
 
-    private final static String KEY_TILE_STATE = "tile_state";
+    private final static String PREF_NAME = "pref";
 
     private SharedPreferences pref;
 
-    public SharedPreferencesHelper(Context base) {
-        super(base);
+    /**
+     * Construction.
+     *
+     * @param context
+     */
+    public SharedPreferencesHelper(Context context) {
+        super(context);
     }
 
     public void setTileState(int state) {
@@ -23,6 +28,14 @@ public class SharedPreferencesHelper extends ContextWrapper {
 
     public int getTileState() {
         return getPreferences().getInt(KEY_TILE_STATE, -1);
+    }
+
+    public void registerChangeListener(SharedPreferences.OnSharedPreferenceChangeListener listener) {
+        getPreferences().registerOnSharedPreferenceChangeListener(listener);
+    }
+
+    public void unregisterChangeListener(SharedPreferences.OnSharedPreferenceChangeListener listener) {
+        getPreferences().unregisterOnSharedPreferenceChangeListener(listener);
     }
 
     private SharedPreferences getPreferences() {
