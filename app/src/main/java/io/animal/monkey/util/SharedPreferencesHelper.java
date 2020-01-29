@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.SharedPreferences;
 
-public class SharedPref extends ContextWrapper {
+public class SharedPreferencesHelper extends ContextWrapper {
 
     private final static String PREF_NAME = "pref";
 
@@ -13,7 +13,7 @@ public class SharedPref extends ContextWrapper {
 
     private SharedPreferences pref;
 
-    public SharedPref(Context base) {
+    public SharedPreferencesHelper(Context base) {
         super(base);
     }
 

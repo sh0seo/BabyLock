@@ -1,15 +1,13 @@
 package io.animal.monkey.powerswitch.quicksetting;
 
-import android.content.Intent;
 import android.os.Build;
-import android.os.IBinder;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
 import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
-import io.animal.monkey.util.SharedPref;
+import io.animal.monkey.util.SharedPreferencesHelper;
 
 @RequiresApi(api = Build.VERSION_CODES.N)
 public class SwitchTileService extends TileService {
@@ -20,7 +18,7 @@ public class SwitchTileService extends TileService {
 
     private Tile tile;
 
-    private SharedPref sp;
+    private SharedPreferencesHelper sp;
 
 //    @Override
 //    public IBinder onBind(Intent intent) {
@@ -71,9 +69,9 @@ public class SwitchTileService extends TileService {
         updateTile();
     }
 
-    private SharedPref getPref() {
+    private SharedPreferencesHelper getPref() {
         if (sp == null) {
-           sp = new SharedPref(getApplication());
+           sp = new SharedPreferencesHelper(getApplication());
         }
 
         return sp;

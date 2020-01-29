@@ -1,21 +1,16 @@
 package io.animal.monkey.accessibility;
 
 import android.accessibilityservice.AccessibilityService;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.os.IBinder;
 import android.provider.Settings;
 import android.service.quicksettings.Tile;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
-import android.widget.Toast;
 
-import io.animal.monkey.powerswitch.quicksetting.SwitchTileService;
-import io.animal.monkey.util.SharedPref;
+import io.animal.monkey.util.SharedPreferencesHelper;
 
 public class EventAccessibilityService extends AccessibilityService {
 
@@ -23,7 +18,7 @@ public class EventAccessibilityService extends AccessibilityService {
 
 //    private IBinder tileService;
 
-    private SharedPref sp;
+    private SharedPreferencesHelper sp;
 
     @Override
     public void onAccessibilityEvent(AccessibilityEvent event) {
@@ -75,7 +70,7 @@ public class EventAccessibilityService extends AccessibilityService {
 
 //        tileService = new SwitchTileService();
         try {
-            sp = new SharedPref(getApplication());
+            sp = new SharedPreferencesHelper(getApplication());
         } catch (NullPointerException e) {
             Log.e(TAG, e.getMessage());
             return;
