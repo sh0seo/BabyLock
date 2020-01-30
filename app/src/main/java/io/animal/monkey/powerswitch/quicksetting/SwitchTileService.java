@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.RequiresApi;
 
 import io.animal.monkey.AdMobActivity;
+import io.animal.monkey.touch.TouchEventView;
 import io.animal.monkey.util.PermissionHelper;
 import io.animal.monkey.util.SharedPreferencesHelper;
 
@@ -25,6 +26,8 @@ public class SwitchTileService extends TileService {
     private SharedPreferencesHelper sp;
 
     private PermissionHelper permissionHelper;
+
+    private TouchEventView touchEventView;
 
 //    @Override
 //    public IBinder onBind(Intent intent) {

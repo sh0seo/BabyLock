@@ -6,7 +6,6 @@ import android.os.Build
 import android.provider.Settings
 import android.provider.Settings.SettingNotFoundException
 import android.util.Log
-import io.animal.monkey.accessibility.EventAccessibilityService
 
 class PermissionHelper : ContextWrapper {
 
