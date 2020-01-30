@@ -13,19 +13,7 @@ public class EventAccessibilityService extends AccessibilityService {
 
     private final static String TAG = EventAccessibilityService.class.getSimpleName();
 
-//    private IBinder tileService;
-
     private SharedPreferencesHelper sp;
-
-    @Override
-    public void onAccessibilityEvent(AccessibilityEvent event) {
-        Log.d(TAG, "onAccessibilityEvent(" + event.toString() + ")");
-    }
-
-    @Override
-    public void onInterrupt() {
-        Log.d(TAG, "onInterrupt()");
-    }
 
     @Override
     protected boolean onKeyEvent(KeyEvent event) {
@@ -37,10 +25,12 @@ public class EventAccessibilityService extends AccessibilityService {
                 case KeyEvent.KEYCODE_HOME:
                 case KeyEvent.KEYCODE_APP_SWITCH:
                 case KeyEvent.KEYCODE_BACK:
-                case KeyEvent.KEYCODE_VOLUME_UP:
-                case KeyEvent.KEYCODE_VOLUME_DOWN:
+//                case KeyEvent.KEYCODE_VOLUME_UP:
+//                case KeyEvent.KEYCODE_VOLUME_DOWN:
                     // TODO show Lock icon.
-                    Toast.makeText(getApplicationContext(), "show lock icon", Toast.LENGTH_SHORT).show();
+                    if (event.getAction() == KeyEvent.ACTION_UP) {
+                        Toast.makeText(getApplicationContext(), "show lock icon", Toast.LENGTH_SHORT).show();
+                    }
                     return true;
             }
         }
@@ -52,6 +42,7 @@ public class EventAccessibilityService extends AccessibilityService {
     protected void onServiceConnected() {
         super.onServiceConnected();
 
+        // 사용자가 서비스에서 Accessibility를 설정하면 동작.
 //        PermissionHelper permissionHelper = new PermissionHelper(getApplication());
 
 //        boolean isHas = permissionHelper.hasSystemAlertWindowsPermission();
@@ -73,9 +64,20 @@ public class EventAccessibilityService extends AccessibilityService {
             sp = new SharedPreferencesHelper(getApplication());
         } catch (NullPointerException e) {
             Log.e(TAG, e.getMessage());
+            throw new NullPointerException("SharedPreferencesHelper null");
         }
 
         sp.setTileState(Tile.STATE_INACTIVE);
+    }
+
+    @Override
+    public void onAccessibilityEvent(AccessibilityEvent event) {
+        Log.d(TAG, "onAccessibilityEvent(" + event.toString() + ")");
+    }
+
+    @Override
+    public void onInterrupt() {
+        Log.d(TAG, "onInterrupt()");
     }
 
 }
