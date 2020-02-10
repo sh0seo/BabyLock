@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import io.animal.monkey.R;
-import io.animal.monkey.ui.main.MainViewModel;
 
 public class AdMobFragment extends Fragment {
 
