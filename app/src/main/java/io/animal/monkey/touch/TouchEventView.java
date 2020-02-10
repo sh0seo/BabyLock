@@ -51,7 +51,6 @@ public class TouchEventView extends ContextWrapper implements View.OnTouchListen
         kidModeImage = touchView.findViewById(R.id.kid_mode);
 //        touchView = new View(getApplicationContext());
 //        touchView.setBackgroundColor(Color.parseColor("#44FF1122"));
-        touchView.setOnTouchListener(this);
     }
 
     public void updateMiniTouchGestureHeight(@Nullable Integer heightPx) {

@@ -3,9 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/screen_lock"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:touchscreenBlocksFocus="false"
-    android:background="#44FF1122">
+    android:layout_height="match_parent">
+    <!-- android:background="#44FF1122"> -->
     <!-- receive hardware-key event. -->
     <ImageView
         android:id="@+id/kid_mode"

@@ -115,24 +115,24 @@ public class EventAccessibilityService extends AccessibilityService {
         }
     }
 
-    private WindowManager windowManager;
+    private WindowManager _windowManager;
 
     private WindowManager getWindowManager() {
-        if (windowManager == null) {
-            windowManager = (WindowManager) getSystemService(Service.WINDOW_SERVICE);
+        if (_windowManager == null) {
+            _windowManager = (WindowManager) getSystemService(Service.WINDOW_SERVICE);
         }
 
-        return windowManager;
+        return _windowManager;
     }
 
-    private SharedPreferencesHelper sp;
+    private SharedPreferencesHelper _sp;
 
     private SharedPreferencesHelper getSharedPref() {
-        if (sp == null) {
-            sp = new SharedPreferencesHelper(getApplicationContext());
+        if (_sp == null) {
+            _sp = new SharedPreferencesHelper(getApplicationContext());
         }
 
-        return sp;
+        return _sp;
     }
 
 }
