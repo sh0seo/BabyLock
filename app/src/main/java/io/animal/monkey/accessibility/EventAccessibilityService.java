@@ -2,6 +2,10 @@ package io.animal.monkey.accessibility;
 
 import android.accessibilityservice.AccessibilityService;
 import android.app.Service;
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
+import android.provider.Settings;
 import android.service.quicksettings.Tile;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -13,11 +17,14 @@ import org.greenrobot.eventbus.EventBus;
 
 import io.animal.monkey.bus.events.KidModeEvent;
 import io.animal.monkey.touch.TouchEventView;
+import io.animal.monkey.util.PermissionHelper;
 import io.animal.monkey.util.SharedPreferencesHelper;
 
 public class EventAccessibilityService extends AccessibilityService {
 
     private final static String TAG = EventAccessibilityService.class.getSimpleName();
+
+    private final static int REQ_CODE_OVERLAY_PERMISSION = 101;
 
     private TouchEventView touchEventView;
 
@@ -36,8 +43,8 @@ public class EventAccessibilityService extends AccessibilityService {
 //                case KeyEvent.KEYCODE_VOLUME_DOWN:
                     // TODO show Lock icon.
                     if (event.getAction() == KeyEvent.ACTION_UP) {
-                        Toast.makeText(getApplicationContext(), "show lock icon", Toast.LENGTH_SHORT).show();
-                        EventBus.getDefault().post(KidModeEvent.class);
+//                        Toast.makeText(getApplicationContext(), "show lock icon", Toast.LENGTH_SHORT).show();
+                        EventBus.getDefault().post(new KidModeEvent());
                     }
                     return true;
             }
@@ -68,10 +75,24 @@ public class EventAccessibilityService extends AccessibilityService {
 //        }
 
 //        tileService = new SwitchTileService();
+
+
+        PermissionHelper permissionHelper = new PermissionHelper(getApplicationContext());
+        if (!permissionHelper.hasSystemAlertWindowsPermission()) {
+            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getPackageName()));
+            startActivity(intent);
+            return;
+        }
+
+        touchEventView = new TouchEventView(getBaseContext());
+        touchEventView.updateParamsForLocation(getWindowManager(), true);
+
         getSharedPref().setTileState(Tile.STATE_INACTIVE);
 
-        touchEventView = new TouchEventView(getApplication());
-        touchEventView.updateParamsForLocation(getWindowManager(), true);
+        // check floating permission
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(getApplicationContext())) {
+//            return;
+//        }
     }
 
     @Override

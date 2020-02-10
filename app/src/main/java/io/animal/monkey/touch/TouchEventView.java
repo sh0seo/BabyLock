@@ -1,5 +1,6 @@
 package io.animal.monkey.touch;
 
+import android.app.Service;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.PixelFormat;
@@ -58,7 +59,8 @@ public class TouchEventView extends ContextWrapper implements View.OnTouchListen
     }
 
     public void updateParamsForLocation(WindowManager windowManager, Boolean isPortrait) {
-        windowManager.addView(touchView, createTouchViewParams());
+        WindowManager w = (WindowManager) getSystemService(Service.WINDOW_SERVICE);
+        w.addView(touchView, createTouchViewParams());
 
         if (isPortrait) {
             miniTouchGestureHeight = SPFManager.getTouchviewPortraitHeight(getApplicationContext());
@@ -81,19 +83,21 @@ public class TouchEventView extends ContextWrapper implements View.OnTouchListen
 
     private WindowManager.LayoutParams createTouchViewParams() {
         WindowManager.LayoutParams params;
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             params = new WindowManager.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT,
-                    WindowManager.LayoutParams.TYPE_ACCESSIBILITY_OVERLAY,
-                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+                            | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                     PixelFormat.TRANSLUCENT);
         } else {
             params = new WindowManager.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT,
-                    WindowManager.LayoutParams.TYPE_PHONE,
-                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                    WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                            | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                     PixelFormat.TRANSLUCENT);
         }
         params.gravity = Gravity.TOP | Gravity.LEFT;
@@ -130,21 +134,24 @@ public class TouchEventView extends ContextWrapper implements View.OnTouchListen
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         Log.d(TAG, "onTouch(" + event.toString() + ")");
-        if (true) {
-            if (event.getToolType(0) == MotionEvent.TOOL_TYPE_STYLUS) {
-                // TODO event prevent
-            }
-        } else {
-            // TODO event prevent
-        }
+//        if (true) {
+//            if (event.getToolType(0) == MotionEvent.TOOL_TYPE_STYLUS) {
+//                // TODO event prevent
+//            }
+//        } else {
+//            // TODO event prevent
+//        }
 
         return false;
     }
 
+    @SuppressWarnings("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void showKidMode(KidModeEvent e) {
         Log.d(TAG, "showKizMode()");
-        kidModeImage.animate().alpha(0.0f).setDuration(1000).start();
+        kidModeImage.animate().alpha(1.0f).setDuration(300).start();
+        kidModeImage.setAlpha(1.0f);
+        kidModeImage.animate().alpha(0.0f).setStartDelay(300).setDuration(300).start();
     }
 
 }
