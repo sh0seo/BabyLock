@@ -17,7 +17,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import org.greenrobot.eventbus.EventBus;
+
 import io.animal.monkey.R;
+import io.animal.monkey.bus.events.AlertBoxStatusEvent;
 import io.animal.monkey.util.PermissionHelper;
 
 public class MainFragment extends Fragment {
@@ -80,6 +83,15 @@ public class MainFragment extends Fragment {
                 Toast.makeText(getContext(), "accessibility", Toast.LENGTH_SHORT).show();
             }
         });
+
+        Button box = getView().findViewById(R.id.box_test);
+        box.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EventBus.getDefault().post(new AlertBoxStatusEvent());
+            }
+        });
+
     }
 
     @Override

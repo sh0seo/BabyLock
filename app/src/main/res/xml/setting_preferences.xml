@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <CheckBoxPreference
+        app:key="lock_screen"
+        app:icon="@drawable/ic_clear"
+        app:title="title"
+        app:summary="display_etc"
+        app:defaultValue="true"/>
+
+<!--    <PreferenceCategory-->
+<!--        app:title="@string/alarm_title"-->
+<!--        app:iconSpaceReserved="false">-->
+
+<!--        <Preference-->
+<!--            app:key="ringtone"-->
+<!--            app:title="@string/alarm_type_title"-->
+<!--            app:icon="@drawable/ic_alarm_active_24px"-->
+<!--            app:summary="@string/alarm_type_title"/>-->
+
+<!--        <SeekBarPreference-->
+<!--            app:key="ringtone_volume"-->
+<!--            app:icon="@drawable/ic_volume_up_24px"-->
+<!--            app:title="@string/alarm_volume_title"-->
+<!--            app:showSeekBarValue="true" />-->
+
+<!--        <SwitchPreferenceCompat-->
+<!--            app:key="vibration"-->
+<!--            app:icon="@drawable/ic_vibration_24px"-->
+<!--            app:title="@string/vibration_title"/>-->
+
+<!--    </PreferenceCategory>-->
+
+    <Preference
+        app:key="open_sources"
+        app:title="정보"
+        app:icon="@drawable/ic_sample_android" />
+
+</PreferenceScreen>
