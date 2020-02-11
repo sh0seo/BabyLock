@@ -110,7 +110,6 @@ public class MainActivity extends AppCompatActivity {
                     .show(settingFragment)
                     .commitNow();
         }
-
     }
 
     private void showPermissionAlertBox() {
