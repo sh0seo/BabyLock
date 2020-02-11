@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">_\u0020BabyLock</string>
+    <string name="app_version">1.0.0</string>
 
     <string name="admob_app_id">ca-app-pub-2571675041295621~2009914968</string>
     <string name="banner_ad_unit_id">ca-app-pub-2571675041295621/4586130938</string>

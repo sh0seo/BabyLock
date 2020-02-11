@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showPermissionAlertBox() {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle("권한확인");
         alertDialog.setMessage("앱 구동에 필요한 권한 확인이 필요합니다.");
         alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -125,6 +125,13 @@ public class MainActivity extends AppCompatActivity {
                 Snackbar.make(getRootView(), "Show Full Dialog Box", Snackbar.LENGTH_SHORT).show();
             }
         });
+        alertDialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        alertDialog.setCancelable(false);
         alertDialog.show();
     }
 

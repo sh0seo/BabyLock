@@ -174,5 +174,15 @@
             app:layout_constraintTop_toBottomOf="@+id/logo_container"
             android:background="@drawable/border" />
 
+<!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--            android:id="@+id/fab"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_margin="16dp"-->
+<!--            android:clickable="true"-->
+<!--            app:srcCompat="@drawable/ic_add_black_24dp"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintRight_toRightOf="parent"-->
+<!--            />-->
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

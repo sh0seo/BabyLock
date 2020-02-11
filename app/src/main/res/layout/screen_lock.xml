@@ -3,8 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/screen_lock"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
     <!-- android:background="#44FF1122"> -->
+    <!-- receive hardware-key event. -->
+    <ImageButton
+        android:id="@+id/stop_button"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@drawable/ic_lock_outline_black_24dp"
+        android:background="@drawable/circle_shape"
+        android:alpha="0.5"
+        android:layout_marginTop="50dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <!-- receive hardware-key event. -->
     <ImageView
         android:id="@+id/kid_mode"
