@@ -1,21 +1,11 @@
 package io.animal.monkey;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
-import android.app.FragmentTransaction;
-import android.content.DialogInterface;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.OvalShape;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
-
-import com.google.android.material.snackbar.Snackbar;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -24,7 +14,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import io.animal.monkey.bus.events.AlertBoxStatusEvent;
 import io.animal.monkey.setting.SettingFragment;
 import io.animal.monkey.ui.alert.PermissionFragment;
-import io.animal.monkey.ui.main.MainFragment;
+import io.animal.monkey.ui.alert.TileServiceGuideFragment;
 import io.animal.monkey.util.PermissionHelper;
 
 public class MainActivity extends AppCompatActivity {
@@ -33,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
 
     private SettingFragment settingFragment;
 
+    private TileServiceGuideFragment tileServiceGuideFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
         settingFragment = new SettingFragment();
         permissionFragment = new PermissionFragment();
+        tileServiceGuideFragment = new TileServiceGuideFragment();
 
 //        ImageView logo = findViewById(R.id.logo);
 //
@@ -96,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
         if (!permissionHelper.hasSystemAlertWindowsPermission()
                 || !permissionHelper.isAccessibilitySettingsOn()) {
            showPermissionAlertBox();
+//           testShowTileServiceGuide();
         }
     }
 
@@ -144,6 +138,16 @@ public class MainActivity extends AppCompatActivity {
 //        });
 //        alertDialog.setCancelable(false);
 //        alertDialog.show();
+    }
+
+    private void testShowTileServiceGuide() {
+        if (tileServiceGuideFragment.isAdded() && tileServiceGuideFragment.isVisible()) {
+            return;
+        }
+
+        tileServiceGuideFragment.show(
+                getSupportFragmentManager().beginTransaction(),
+                TileServiceGuideFragment.TAG);
     }
 
     private View getRootView() {
