@@ -8,6 +8,7 @@
         <item name="actionBarStyle">@style/MyActionBar</item>
 <!--        <item name="android:icon">@mipmap/ic_launcher</item>-->
 <!--        <item name="android:homeAsUpIndicator">@mipmap/ic_launcher</item>-->
+        <item name="checkboxStyle">@style/Widget.MaterialComponents.CompoundButton.CheckBox</item>
     </style>
 
     <style name="MyActionBar" parent="@style/Widget.AppCompat.ActionBar.Solid">
@@ -18,4 +19,22 @@
         <item name="android:textColor">@color/colorPrimaryDark</item>
     </style>
 
+    <style name="FullScreenDialogStyle" parent="Theme.AppCompat.DayNight.Dialog.Alert">
+        <item name="android:windowNoTitle">true</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+
+        <!-- Set this to true if you want Full Screen without status bar -->
+        <item name="android:windowFullscreen">false</item>
+
+        <item name="android:windowIsFloating">false</item>
+
+        <!-- This is important! Don't forget to set window background -->
+        <item name="android:windowBackground">@color/colorWhite</item>
+
+        <!-- Additionally if you want animations when dialog opening -->
+        <item name="android:windowEnterAnimation">@anim/slide_up</item>
+        <item name="android:windowExitAnimation">@anim/slide_down</item>
+        <item name="android:textColor">@color/colorPrimaryDark</item>
+    </style>
 </resources>

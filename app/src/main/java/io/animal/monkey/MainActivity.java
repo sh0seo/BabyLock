@@ -5,6 +5,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
@@ -22,6 +23,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import io.animal.monkey.bus.events.AlertBoxStatusEvent;
 import io.animal.monkey.setting.SettingFragment;
+import io.animal.monkey.ui.alert.PermissionFragment;
 import io.animal.monkey.ui.main.MainFragment;
 import io.animal.monkey.util.PermissionHelper;
 
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.main_activity);
 
         settingFragment = new SettingFragment();
+        permissionFragment = new PermissionFragment();
 
 //        ImageView logo = findViewById(R.id.logo);
 //
@@ -112,26 +115,35 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    PermissionFragment permissionFragment;
+
     private void showPermissionAlertBox() {
-        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-        alertDialog.setTitle("권한확인");
-        alertDialog.setMessage("앱 구동에 필요한 권한 확인이 필요합니다.");
-        alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+        if (permissionFragment.isAdded() && permissionFragment.isVisible()) {
+           return;
+        }
+
+        permissionFragment.show(getSupportFragmentManager().beginTransaction(), PermissionFragment.TAG);
+
+//        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+//        alertDialog.setTitle("권한확인");
+//        alertDialog.setMessage("앱 구동에 필요한 권한 확인이 필요합니다.");
+//        alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
 //                Intent intent = new Intent(this, SettingFragment.class);
 //                startActivity(intent);
-                Snackbar.make(getRootView(), "Show Full Dialog Box", Snackbar.LENGTH_SHORT).show();
-            }
-        });
-        alertDialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        alertDialog.setCancelable(false);
-        alertDialog.show();
+//                Snackbar.make(getRootView(), "Show Full Dialog Box", Snackbar.LENGTH_SHORT).show();
+//
+//            }
+//        });
+//        alertDialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//                dialog.dismiss();
+//            }
+//        });
+//        alertDialog.setCancelable(false);
+//        alertDialog.show();
     }
 
     private View getRootView() {
