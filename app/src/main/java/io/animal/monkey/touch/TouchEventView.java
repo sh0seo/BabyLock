@@ -3,8 +3,10 @@ package io.animal.monkey.touch;
 import android.app.Service;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Build;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -24,7 +26,7 @@ import io.animal.monkey.R;
 import io.animal.monkey.bus.events.KidModeEvent;
 import io.animal.monkey.bus.events.TileServiceEvent;
 
-public class TouchEventView extends ContextWrapper implements View.OnTouchListener {
+public class TouchEventView extends ContextWrapper {
 
     private final static String TAG = "TouchEventView";
 
@@ -50,13 +52,20 @@ public class TouchEventView extends ContextWrapper implements View.OnTouchListen
     private void init() {
         LayoutInflater inflate = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         touchView = inflate.inflate(R.layout.screen_lock, null);
-        touchView.setOnTouchListener(this);
+        touchView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                Log.d(TAG, "setOnTouchListener:");
+                return false;
+            }
+        });
 
         stopButton = touchView.findViewById(R.id.stop_button);
-        stopButton.setOnClickListener(new View.OnClickListener() {
+        stopButton.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                Log.d(TAG, "seOnClickListener:");
+            public boolean onTouch(View v, MotionEvent event) {
+                Log.d(TAG, "setOnTouchListener:");
+                return false;
             }
         });
         kidModeImage = touchView.findViewById(R.id.kid_mode);
@@ -108,8 +117,8 @@ public class TouchEventView extends ContextWrapper implements View.OnTouchListen
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
-                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                            | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+                    WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+                            | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                             | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                     ,
                     PixelFormat.TRANSLUCENT);
@@ -132,14 +141,17 @@ public class TouchEventView extends ContextWrapper implements View.OnTouchListen
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
-                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                     PixelFormat.TRANSLUCENT);
         } else {
             params = new WindowManager.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
-                            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                     WindowManager.LayoutParams.FLAG_LOCAL_FOCUS_MODE
+                    | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+
+                    ,
                     PixelFormat.TRANSLUCENT);
         }
         params.gravity = Gravity.TOP | Gravity.LEFT;
@@ -172,19 +184,18 @@ public class TouchEventView extends ContextWrapper implements View.OnTouchListen
         return touchView;
     }
 
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        Log.d(TAG, "onTouch(" + event.toString() + ")");
-//        if (true) {
-//            if (event.getToolType(0) == MotionEvent.TOOL_TYPE_STYLUS) {
-//                // TODO event prevent
-//            }
-//        } else {
-//            // TODO event prevent
-//        }
+    /// ---------------------------------------------------------------------------- android service
 
-        return false;
+    private void sendBroadcastCloseSystemDialog() {
+        Intent i = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+        getApplicationContext().sendBroadcast(i);
     }
+
+    private WindowManager getWindowManager() {
+        return (WindowManager) getSystemService(Service.WINDOW_SERVICE);
+    }
+
+    /// ------------------------------------------------------------------------ android service end
 
     /// -------------------------------------------------------------------------- EventBus Listener
 
@@ -205,14 +216,33 @@ public class TouchEventView extends ContextWrapper implements View.OnTouchListen
         if (event.isEnable()) {
             // Service Started
             // Ignore user'touch event at service start
-            getTouchView().setLayoutParams(updateTouchViewParams());
-            getTouchView().setOnTouchListener(this);
+            getWindowManager().updateViewLayout(getTouchView(), updateTouchViewParams());
+
+            // 알림영역을 close.
+            sendBroadcastCloseSystemDialog();
+
+            // todo Remove. for temp code
+//            new Handler().postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    WindowManager w = (WindowManager) getSystemService(Service.WINDOW_SERVICE);
+//                    w.updateViewLayout(getTouchView(), createTouchViewParams());
+//                    EventBus.getDefault().post(new TileServiceEvent(false));
+//                }
+//            }, 3000);
+            // end
         } else {
             // Service ended
             // Enable user'touch event at service end
-            getTouchView().setLayoutParams(createTouchViewParams());
+            getWindowManager().updateViewLayout(getTouchView(), createTouchViewParams());
         }
     }
 
     /// ---------------------------------------------------------------------- EventBus Listener end
+
+    /// -------
+
+
+
+    /// -----
 }
