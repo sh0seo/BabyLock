@@ -14,8 +14,6 @@ import io.animal.monkey.R;
 
 public class AdMobFragment extends Fragment {
 
-    private AdMobViewModel viewModel;
-
     public static AdMobFragment newInstance() {
         return new AdMobFragment();
     }
@@ -30,8 +28,6 @@ public class AdMobFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        viewModel = ViewModelProviders.of(this).get(AdMobViewModel.class);
-        // TODO: Use the ViewModel
     }
 
 }

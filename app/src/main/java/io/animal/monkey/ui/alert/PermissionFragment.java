@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
+import android.widget.Toast;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.DialogFragment;
@@ -108,6 +109,24 @@ public class PermissionFragment extends DialogFragment {
         } else {
             accessibility.setChecked(false);
             accessibility.setClickable(true);
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        PermissionHelper permissionHelper = new PermissionHelper(getContext());
+
+        // 모든 권한을 확인 했다면
+        if (!permissionHelper.isAccessibilitySettingsOn()
+                || !permissionHelper.hasSystemAlertWindowsPermission()) {
+            Toast.makeText(getContext(),
+                    "앱을 실행하기 위한 권한이 부족하여 앱을 종료합니다.",
+                    Toast.LENGTH_LONG).show();
+
+            // 실행 권한이 없다면 앱을 종료.
+            getActivity().finish();
         }
     }
 }

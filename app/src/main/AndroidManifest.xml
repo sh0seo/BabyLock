@@ -45,7 +45,8 @@
         </activity>
 
         <activity android:name=".AdMobActivity"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:theme="@style/Theme.AppCompat.NoActionBar">
         </activity>
 
         <meta-data

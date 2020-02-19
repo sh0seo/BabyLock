@@ -1,6 +1,7 @@
 package io.animal.monkey;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.service.quicksettings.Tile;
 import android.util.Log;
 
@@ -61,6 +62,14 @@ public class AdMobActivity extends AppCompatActivity {
                 Log.d(TAG, "onAdLoaded");
 
                 showInterstitial();
+
+                // stop service
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        EventBus.getDefault().post(new TileServiceEvent(false));
+                    }
+                }, 2000);
             }
 
             @Override
@@ -91,14 +100,6 @@ public class AdMobActivity extends AppCompatActivity {
             public void onAdClosed() {
                 Log.d(TAG, "onAdClosed");
 
-                // load next ad.
-                mInterstitialAd.loadAd(new AdRequest.Builder().build());
-
-                // todo stop service
-                getSharedPref().setTileState(Tile.STATE_INACTIVE);
-
-                // or stop service
-                EventBus.getDefault().post(new TileServiceEvent());
 
                 finish();
             }

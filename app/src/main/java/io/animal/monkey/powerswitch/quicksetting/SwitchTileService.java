@@ -79,14 +79,9 @@ public class SwitchTileService extends TileService {
         } else if (state == Tile.STATE_ACTIVE) {
             // TODO Show AdMob.
             // TODO AdMob Success and be change inactive.
-//            Intent intent = getAdMobActivityIntent();
-//            startActivity(intent);
+            Intent intent = getAdMobActivityIntent();
+            startActivity(intent);
 
-            EventBus.getDefault().post(new TileServiceEvent());
-
-            // todo 아래코드는 AdMob 광고가 정상 종료된 후에 사용해야 함.
-//            getTile().setState(Tile.STATE_INACTIVE);
-//            getSharedPref().setTileState(Tile.STATE_INACTIVE);
         } else if (state == Tile.STATE_UNAVAILABLE) {
             // TODO Show permission Dialog.
             Toast.makeText(getApplicationContext(), "not permission", Toast.LENGTH_SHORT).show();
@@ -149,13 +144,18 @@ public class SwitchTileService extends TileService {
 
     /// ----------------------------------------------------------------------------------- EventBus
 
-    @Subscribe(threadMode = ThreadMode.BACKGROUND)
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onTileServiceEvent(TileServiceEvent event) {
-        Log.d(TAG, "onTileServiceEvent:");
+        Log.d(TAG, "onTileServiceEvent: " + event.isEnable());
+        if (!event.isEnable()) {
+            getTile().setState(Tile.STATE_INACTIVE);
+            getSharedPref().setTileState(Tile.STATE_INACTIVE);
+        }
+
+        getTile().updateTile();
     }
 
     /// ------------------------------------------------------------------------------- EventBus end
-
 
     /// --------------------------------------------------------------------------- SharedPreference
 
@@ -171,8 +171,8 @@ public class SwitchTileService extends TileService {
 
     /// ----------------------------------------------------------------------- SharedPreference end
 
-
     /// --------------------------------------------------------------------------------------- Tile
+
     private Tile _tile;
 
     private Tile getTile() {
