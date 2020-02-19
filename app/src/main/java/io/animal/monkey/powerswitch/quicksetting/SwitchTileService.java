@@ -9,7 +9,13 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import io.animal.monkey.AdMobActivity;
+import io.animal.monkey.MainActivity;
+import io.animal.monkey.bus.events.TileServiceEvent;
 import io.animal.monkey.touch.TouchEventView;
 import io.animal.monkey.util.PermissionHelper;
 import io.animal.monkey.util.SharedPreferencesHelper;
@@ -21,9 +27,8 @@ public class SwitchTileService extends TileService {
 
 //    private IBinder binder;
 
-    private Tile tile;
 
-    private SharedPreferencesHelper sp;
+
 
     private PermissionHelper permissionHelper;
 
@@ -39,6 +44,21 @@ public class SwitchTileService extends TileService {
 //        return super.onUnbind(intent);
 //    }
 
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        EventBus.getDefault().unregister(this);
+    }
+
     @Override
     public void onClick() {
         super.onClick();
@@ -47,22 +67,26 @@ public class SwitchTileService extends TileService {
         boolean hasAccessibility = getPermissionHelper().isAccessibilitySettingsOn();
         if (!hasAccessibility) {
             // TODO Show permission Dialog.
-            Toast.makeText(getApplicationContext(), "not permission", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getApplicationContext(), "not permission", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(getApplicationContext(), MainActivity.class));
             return;
         }
 
         int state = getTile().getState();
         if (state == Tile.STATE_INACTIVE) {
             getTile().setState(Tile.STATE_ACTIVE);
-            getPref().setTileState(Tile.STATE_ACTIVE);
+            getSharedPref().setTileState(Tile.STATE_ACTIVE);
         } else if (state == Tile.STATE_ACTIVE) {
             // TODO Show AdMob.
             // TODO AdMob Success and be change inactive.
-            Intent intent = getAdMobActivityIntent();
-            startActivity(intent);
+//            Intent intent = getAdMobActivityIntent();
+//            startActivity(intent);
 
-            getTile().setState(Tile.STATE_INACTIVE);
-            getPref().setTileState(Tile.STATE_INACTIVE);
+            EventBus.getDefault().post(new TileServiceEvent());
+
+            // todo 아래코드는 AdMob 광고가 정상 종료된 후에 사용해야 함.
+//            getTile().setState(Tile.STATE_INACTIVE);
+//            getSharedPref().setTileState(Tile.STATE_INACTIVE);
         } else if (state == Tile.STATE_UNAVAILABLE) {
             // TODO Show permission Dialog.
             Toast.makeText(getApplicationContext(), "not permission", Toast.LENGTH_SHORT).show();
@@ -99,20 +123,6 @@ public class SwitchTileService extends TileService {
         Log.d(TAG, "onStopListening()");
     }
 
-    private SharedPreferencesHelper getPref() {
-        if (sp == null) {
-           sp = new SharedPreferencesHelper(getApplication());
-        }
-
-        return sp;
-    }
-
-    private Tile getTile() {
-        if (tile == null) {
-            tile = getQsTile();
-        }
-        return tile;
-    }
 
     private Intent getAdMobActivityIntent() {
         Intent intent = new Intent(getApplicationContext(), AdMobActivity.class);
@@ -137,4 +147,40 @@ public class SwitchTileService extends TileService {
         return permissionHelper;
     }
 
+    /// ----------------------------------------------------------------------------------- EventBus
+
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
+    public void onTileServiceEvent(TileServiceEvent event) {
+        Log.d(TAG, "onTileServiceEvent:");
+    }
+
+    /// ------------------------------------------------------------------------------- EventBus end
+
+
+    /// --------------------------------------------------------------------------- SharedPreference
+
+    private SharedPreferencesHelper _sharedPref;
+
+    private SharedPreferencesHelper getSharedPref() {
+        if (_sharedPref == null) {
+            _sharedPref = new SharedPreferencesHelper(getApplication());
+        }
+
+        return _sharedPref;
+    }
+
+    /// ----------------------------------------------------------------------- SharedPreference end
+
+
+    /// --------------------------------------------------------------------------------------- Tile
+    private Tile _tile;
+
+    private Tile getTile() {
+        if (_tile == null) {
+            _tile = getQsTile();
+        }
+        return _tile;
+    }
+
+    /// ----------------------------------------------------------------------------------- Tile end
 }
