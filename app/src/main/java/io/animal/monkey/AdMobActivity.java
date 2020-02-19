@@ -63,7 +63,7 @@ public class AdMobActivity extends AppCompatActivity {
 
                 showInterstitial();
 
-                // stop service
+                // request stop service delay 2000
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -99,8 +99,6 @@ public class AdMobActivity extends AppCompatActivity {
             @Override
             public void onAdClosed() {
                 Log.d(TAG, "onAdClosed");
-
-
                 finish();
             }
         });

@@ -4,8 +4,8 @@
     android:id="@+id/screen_lock"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-    <!-- android:background="#44FF1122"> -->
+    android:orientation="vertical"
+     android:background="#770000FF">
     <!-- receive hardware-key event. -->
     <ImageButton
         android:id="@+id/stop_button"

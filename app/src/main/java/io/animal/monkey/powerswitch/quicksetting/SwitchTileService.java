@@ -76,6 +76,8 @@ public class SwitchTileService extends TileService {
         if (state == Tile.STATE_INACTIVE) {
             getTile().setState(Tile.STATE_ACTIVE);
             getSharedPref().setTileState(Tile.STATE_ACTIVE);
+
+            EventBus.getDefault().post(new TileServiceEvent(true));
         } else if (state == Tile.STATE_ACTIVE) {
             // TODO Show AdMob.
             // TODO AdMob Success and be change inactive.

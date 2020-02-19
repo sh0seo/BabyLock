@@ -22,6 +22,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import io.animal.monkey.R;
 import io.animal.monkey.bus.events.KidModeEvent;
+import io.animal.monkey.bus.events.TileServiceEvent;
 
 public class TouchEventView extends ContextWrapper implements View.OnTouchListener {
 
@@ -32,6 +33,7 @@ public class TouchEventView extends ContextWrapper implements View.OnTouchListen
     private View touchView;
 
     private ImageView kidModeImage;
+    private ImageView stopButton;
 
     public TouchEventView(Context c) {
         super(c);
@@ -48,6 +50,15 @@ public class TouchEventView extends ContextWrapper implements View.OnTouchListen
     private void init() {
         LayoutInflater inflate = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         touchView = inflate.inflate(R.layout.screen_lock, null);
+        touchView.setOnTouchListener(this);
+
+        stopButton = touchView.findViewById(R.id.stop_button);
+        stopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "seOnClickListener:");
+            }
+        });
         kidModeImage = touchView.findViewById(R.id.kid_mode);
 //        touchView = new View(getApplicationContext());
 //        touchView.setBackgroundColor(Color.parseColor("#44FF1122"));
@@ -88,7 +99,9 @@ public class TouchEventView extends ContextWrapper implements View.OnTouchListen
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
                     WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
-                            | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                            | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                            | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                            ,
                     PixelFormat.TRANSLUCENT);
         } else {
             params = new WindowManager.LayoutParams(
@@ -96,7 +109,9 @@ public class TouchEventView extends ContextWrapper implements View.OnTouchListen
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
                     WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                            | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                            | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+                            | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                    ,
                     PixelFormat.TRANSLUCENT);
         }
         params.gravity = Gravity.TOP | Gravity.LEFT;
@@ -105,6 +120,33 @@ public class TouchEventView extends ContextWrapper implements View.OnTouchListen
         return params;
     }
 
+    /**
+     * Disable User' Touch
+     *
+     * @return
+     */
+    private WindowManager.LayoutParams updateTouchViewParams() {
+        WindowManager.LayoutParams params;
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            params = new WindowManager.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
+                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    PixelFormat.TRANSLUCENT);
+        } else {
+            params = new WindowManager.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+                            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                    PixelFormat.TRANSLUCENT);
+        }
+        params.gravity = Gravity.TOP | Gravity.LEFT;
+        params.x = 0;
+        params.y = 0;
+        return params;
+    }
 //    private WindowManager.LayoutParams createTouchViewParams(int heightPx, int weightPx, int position) {
 //        WindowManager.LayoutParams params;
 //        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
@@ -144,6 +186,8 @@ public class TouchEventView extends ContextWrapper implements View.OnTouchListen
         return false;
     }
 
+    /// -------------------------------------------------------------------------- EventBus Listener
+
     @SuppressWarnings("unused")
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void showKidMode(KidModeEvent e) {
@@ -153,4 +197,22 @@ public class TouchEventView extends ContextWrapper implements View.OnTouchListen
         kidModeImage.animate().alpha(0.0f).setStartDelay(300).setDuration(300).start();
     }
 
+    @SuppressWarnings("unused")
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onTileServiceEvent(TileServiceEvent event) {
+        Log.d(TAG, "onTileServiceEvent:" + event);
+
+        if (event.isEnable()) {
+            // Service Started
+            // Ignore user'touch event at service start
+            getTouchView().setLayoutParams(updateTouchViewParams());
+            getTouchView().setOnTouchListener(this);
+        } else {
+            // Service ended
+            // Enable user'touch event at service end
+            getTouchView().setLayoutParams(createTouchViewParams());
+        }
+    }
+
+    /// ---------------------------------------------------------------------- EventBus Listener end
 }
