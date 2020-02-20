@@ -27,6 +27,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import io.animal.monkey.R;
 import io.animal.monkey.bus.events.KidModeEvent;
+import io.animal.monkey.bus.events.TileServiceEvent;
 import io.animal.monkey.touch.TouchEventView;
 import io.animal.monkey.util.PermissionHelper;
 import io.animal.monkey.util.SharedPreferencesHelper;
@@ -50,38 +51,40 @@ public class EventAccessibilityService extends AccessibilityService {
         // !!! 중요정책
         // HOME 버튼은 Baby 시청모드를 on/off 하는 entry point.
         if (getSharedPref().isBabyMode()) {
-            // todo baby mode
+            // baby mode
+            switch (keyCode) {
+                case KeyEvent.KEYCODE_HOME:
+                    if (action == KeyEvent.ACTION_DOWN) {
+                        timer.cancel();
+                        timer.start();
+                    } else if (action == KeyEvent.ACTION_UP) {
+                        if (isTimeout) {
+                            getSharedPref().setBabyMode(false);
+                            EventBus.getDefault().post(new TileServiceEvent(false));
+                        }
+                    }
+                    return true;
+                case KeyEvent.KEYCODE_APP_SWITCH:
+                case KeyEvent.KEYCODE_BACK:
+                    // TODO show Lock icon.
+                    if (action == KeyEvent.ACTION_UP) {
+                        EventBus.getDefault().post(new KidModeEvent());
+                    }
+                    return true;
+            }
         } else {
             if (keyCode == KeyEvent.KEYCODE_HOME) {
                 if (action == KeyEvent.ACTION_DOWN) {
                     timer.cancel();
                     timer.start();
                 } else if (action == KeyEvent.ACTION_UP) {
-                    if (ti) {
-
+                    if (isTimeout) {
+                       getSharedPref().setBabyMode(true);
+                        EventBus.getDefault().post(new TileServiceEvent(true));
                     }
                 }
             }
         }
-
-//        if (getSharedPref().getTileState() == Tile.STATE_ACTIVE) {
-//            int code = event.getKeyCode();
-//            switch (code) {
-//                case KeyEvent.KEYCODE_HOME:
-//                case KeyEvent.KEYCODE_APP_SWITCH:
-//                case KeyEvent.KEYCODE_BACK:
-//                    // TODO volume up, down key is ready.
-////                case KeyEvent.KEYCODE_VOLUME_UP:
-////                case KeyEvent.KEYCODE_VOLUME_DOWN:
-//                    // TODO show Lock icon.
-//                    if (event.getAction() == KeyEvent.ACTION_UP) {
-////                        Toast.makeText(getApplicationContext(), "show lock icon", Toast.LENGTH_SHORT).show();
-//                        EventBus.getDefault().post(new KidModeEvent());
-//                    }
-//                     // TODO Home Pressed 3 sec.
-//                    return true;
-//            }
-//        }
 
         return super.onKeyEvent(event);
     }
@@ -174,10 +177,9 @@ public class EventAccessibilityService extends AccessibilityService {
 
     private final static long TIMER_PERIOD = 1000;
 
+    private boolean isTimeout;
+
     private CountDownTimer timer = new CountDownTimer(NEED_SECONDS_FOR_BABY_MODE, TIMER_PERIOD) {
-
-        private boolean isTimeout = false;
-
         @Override
         public void onTick(long millisUntilFinished) {
             isTimeout = false;
@@ -186,10 +188,11 @@ public class EventAccessibilityService extends AccessibilityService {
         @Override
         public void onFinish() {
             isTimeout = true;
-        }
-
-        public boolean isTimeout() {
-            return isTimeout;
+            if (getSharedPref().isBabyMode()) {
+                Toast.makeText(getApplicationContext(), "아기시청모드가 해제 되었습니다.", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(getApplicationContext(), "아기시청모드가 되었습니다.", Toast.LENGTH_LONG).show();
+            }
         }
     };
 

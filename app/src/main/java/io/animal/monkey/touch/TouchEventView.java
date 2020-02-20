@@ -6,7 +6,6 @@ import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Build;
-import android.os.Handler;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -60,14 +59,14 @@ public class TouchEventView extends ContextWrapper {
             }
         });
 
-        stopButton = touchView.findViewById(R.id.stop_button);
-        stopButton.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                Log.d(TAG, "setOnTouchListener:");
-                return false;
-            }
-        });
+//        stopButton = touchView.findViewById(R.id.stop_button);
+//        stopButton.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                Log.d(TAG, "setOnTouchListener:");
+//                return false;
+//            }
+//        });
         kidModeImage = touchView.findViewById(R.id.kid_mode);
 //        touchView = new View(getApplicationContext());
 //        touchView.setBackgroundColor(Color.parseColor("#44FF1122"));
@@ -141,16 +140,15 @@ public class TouchEventView extends ContextWrapper {
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
-                            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                     PixelFormat.TRANSLUCENT);
         } else {
             params = new WindowManager.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
-                     WindowManager.LayoutParams.FLAG_LOCAL_FOCUS_MODE
-                    | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-
+                     WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                    | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
                     ,
                     PixelFormat.TRANSLUCENT);
         }
@@ -159,26 +157,6 @@ public class TouchEventView extends ContextWrapper {
         params.y = 0;
         return params;
     }
-//    private WindowManager.LayoutParams createTouchViewParams(int heightPx, int weightPx, int position) {
-//        WindowManager.LayoutParams params;
-//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-//            params = new WindowManager.LayoutParams(
-//                    ViewGroup.LayoutParams.MATCH_PARENT,
-//                    ViewGroup.LayoutParams.MATCH_PARENT,
-//                    WindowManager.LayoutParams.TYPE_PHONE,
-//                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-//                    PixelFormat.TRANSLUCENT);
-//        } else {
-//            params = new WindowManager.LayoutParams(
-//                    ViewGroup.LayoutParams.MATCH_PARENT,
-//                    ViewGroup.LayoutParams.MATCH_PARENT,
-//                    WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
-//                    WindowManager.LayoutParams.FLAG_LOCAL_FOCUS_MODE,
-//                    PixelFormat.TRANSLUCENT);
-//        }
-//        params.gravity = Gravity.TOP | Gravity.LEFT;
-//        return params;
-//    }
 
     public View getTouchView() {
         return touchView;
@@ -203,9 +181,9 @@ public class TouchEventView extends ContextWrapper {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void showKidMode(KidModeEvent e) {
         Log.d(TAG, "showKizMode()");
-        kidModeImage.animate().alpha(1.0f).setDuration(300).start();
+        kidModeImage.animate().alpha(1.0f).setDuration(200).start();
         kidModeImage.setAlpha(1.0f);
-        kidModeImage.animate().alpha(0.0f).setStartDelay(300).setDuration(300).start();
+        kidModeImage.animate().alpha(0.0f).setStartDelay(200).setDuration(200).start();
     }
 
     @SuppressWarnings("unused")
@@ -239,10 +217,4 @@ public class TouchEventView extends ContextWrapper {
     }
 
     /// ---------------------------------------------------------------------- EventBus Listener end
-
-    /// -------
-
-
-
-    /// -----
 }
