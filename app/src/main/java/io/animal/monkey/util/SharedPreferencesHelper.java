@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 public class SharedPreferencesHelper extends ContextWrapper {
 
     public final static String KEY_TILE_STATE = "tile_state";
+    public final static String KEY_BABY_MODE = "baby_mode";
 
     private final static String PREF_NAME = "pref";
 
@@ -28,6 +29,14 @@ public class SharedPreferencesHelper extends ContextWrapper {
 
     public int getTileState() {
         return getPreferences().getInt(KEY_TILE_STATE, -1);
+    }
+
+    public void setBabyMode(boolean enable) {
+        getPreferences().edit().putBoolean(KEY_BABY_MODE, enable).apply();
+    }
+
+    public boolean isBabyMode() {
+        return getPreferences().getBoolean(KEY_BABY_MODE, false);
     }
 
     public void registerChangeListener(SharedPreferences.OnSharedPreferenceChangeListener listener) {
