@@ -145,7 +145,8 @@ public class TouchEventView extends ContextWrapper {
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     WindowManager.LayoutParams.TYPE_SYSTEM_ALERT,
-                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                            | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
                     PixelFormat.TRANSLUCENT);
         } else {
             params = new WindowManager.LayoutParams(
@@ -153,8 +154,7 @@ public class TouchEventView extends ContextWrapper {
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
                      WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                    | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
-                    ,
+                             | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
                     PixelFormat.TRANSLUCENT);
         }
         params.gravity = Gravity.TOP | Gravity.LEFT;
@@ -200,6 +200,8 @@ public class TouchEventView extends ContextWrapper {
             // Service Started
             // Ignore user'touch event at service start
             getWindowManager().updateViewLayout(getTouchView(), updateTouchViewParams());
+
+            sendBroadcastCloseSystemDialog();
         } else {
             // Service ended
             // Enable user'touch event at service end
