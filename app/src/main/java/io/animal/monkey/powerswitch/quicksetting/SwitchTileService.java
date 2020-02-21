@@ -12,7 +12,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import io.animal.monkey.AdMobActivity;
-import io.animal.monkey.bus.events.TileServiceEvent;
+import io.animal.monkey.bus.events.TapServiceEvent;
 import io.animal.monkey.touch.TouchEventView;
 import io.animal.monkey.util.PermissionHelper;
 import io.animal.monkey.util.SharedPreferencesHelper;
@@ -57,7 +57,7 @@ public class SwitchTileService extends TileService {
 //            getTile().setState(Tile.STATE_ACTIVE);
 //            getSharedPref().setTileState(Tile.STATE_ACTIVE);
 //
-//            EventBus.getDefault().post(new TileServiceEvent(true));
+//            EventBus.getDefault().post(new TapServiceEvent(true));
 //        } else if (state == Tile.STATE_ACTIVE) {
 //            // TODO Show AdMob.
 //            // TODO AdMob Success and be change inactive.
@@ -127,11 +127,11 @@ public class SwitchTileService extends TileService {
     /// ----------------------------------------------------------------------------------- EventBus
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onTileServiceEvent(TileServiceEvent event) {
+    public void onTileServiceEvent(TapServiceEvent event) {
         Log.d(TAG, "onTileServiceEvent: " + event.isEnable());
         if (!event.isEnable()) {
             getTile().setState(Tile.STATE_INACTIVE);
-            getSharedPref().setTileState(Tile.STATE_INACTIVE);
+//            getSharedPref().setTileState(Tile.STATE_INACTIVE);
         }
 
         getTile().updateTile();

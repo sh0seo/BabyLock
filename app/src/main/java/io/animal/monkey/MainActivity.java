@@ -23,6 +23,7 @@ import io.animal.monkey.setting.SettingFragment;
 import io.animal.monkey.ui.alert.PermissionFragment;
 import io.animal.monkey.ui.alert.TileServiceGuideFragment;
 import io.animal.monkey.util.PermissionHelper;
+import io.animal.monkey.util.SharedPreferencesHelper;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
     private SettingFragment settingFragment;
 
     private TileServiceGuideFragment tileServiceGuideFragment;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,7 +97,9 @@ public class MainActivity extends AppCompatActivity {
         PermissionHelper permissionHelper = new PermissionHelper(this);
         if (!permissionHelper.hasSystemAlertWindowsPermission()
                 || !permissionHelper.isAccessibilitySettingsOn()) {
-           showPermissionAlertBox();
+            onInitializeSharedPref();
+
+            showPermissionAlertBox();
 //           testShowTileServiceGuide();
         }
     }
@@ -162,6 +164,23 @@ public class MainActivity extends AppCompatActivity {
     private View getRootView() {
         return getWindow().getDecorView().getRootView();
     }
+
+    /// --------------------------------------------------------------------------------- SharedPref
+
+    private SharedPreferencesHelper _sp;
+
+    private SharedPreferencesHelper getSharedPref() {
+        if (_sp == null) {
+            _sp = new SharedPreferencesHelper(this);
+        }
+        return _sp;
+    }
+
+    private void onInitializeSharedPref() {
+        getSharedPref().setBabyMode(false);
+    }
+
+    /// ----------------------------------------------------------------------------- SharedPref end
 
     /// -------------------------------------------------------------------------------------- AdMob
 

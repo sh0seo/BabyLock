@@ -2,7 +2,6 @@ package io.animal.monkey;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.service.quicksettings.Tile;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -17,7 +16,7 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 
 import org.greenrobot.eventbus.EventBus;
 
-import io.animal.monkey.bus.events.TileServiceEvent;
+import io.animal.monkey.bus.events.TapServiceEvent;
 import io.animal.monkey.ui.admob.AdMobFragment;
 import io.animal.monkey.util.SharedPreferencesHelper;
 
@@ -67,7 +66,7 @@ public class AdMobActivity extends AppCompatActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        EventBus.getDefault().post(new TileServiceEvent(false));
+                        EventBus.getDefault().post(new TapServiceEvent(false));
                     }
                 }, 2000);
             }

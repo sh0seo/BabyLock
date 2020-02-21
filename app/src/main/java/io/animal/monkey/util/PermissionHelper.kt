@@ -30,7 +30,7 @@ class PermissionHelper : ContextWrapper {
             accessibilityEnabled = Settings.Secure.getInt(this.contentResolver,
                     Settings.Secure.ACCESSIBILITY_ENABLED)
         } catch (e: SettingNotFoundException) { //accessibility is Enable
-            Log.i(TAG, e.message)
+            Log.i(TAG, e.toString())
         }
         if (accessibilityEnabled == 1) {
             val services = Settings.Secure.getString(this.contentResolver,

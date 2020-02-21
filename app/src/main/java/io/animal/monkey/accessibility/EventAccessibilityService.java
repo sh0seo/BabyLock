@@ -4,7 +4,6 @@ import android.accessibilityservice.AccessibilityService;
 import android.app.Service;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.CountDownTimer;
 import android.provider.Settings;
 import android.service.quicksettings.Tile;
@@ -14,20 +13,10 @@ import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.Toast;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.InterstitialAd;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
-
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
-import io.animal.monkey.R;
 import io.animal.monkey.bus.events.KidModeEvent;
-import io.animal.monkey.bus.events.TileServiceEvent;
+import io.animal.monkey.bus.events.TapServiceEvent;
 import io.animal.monkey.touch.TouchEventView;
 import io.animal.monkey.util.PermissionHelper;
 import io.animal.monkey.util.SharedPreferencesHelper;
@@ -40,7 +29,6 @@ public class EventAccessibilityService extends AccessibilityService {
 
     private TouchEventView touchEventView;
 
-
     @Override
     protected boolean onKeyEvent(KeyEvent event) {
         Log.d(TAG, "onKeyEvent(" + event.toString() + ")");
@@ -50,39 +38,20 @@ public class EventAccessibilityService extends AccessibilityService {
 
         // !!! 중요정책
         // HOME 버튼은 Baby 시청모드를 on/off 하는 entry point.
+        if (keyCode == KeyEvent.KEYCODE_HOME) {
+            onPressedHomeKey(action);
+        }
+
         if (getSharedPref().isBabyMode()) {
-            // baby mode
             switch (keyCode) {
                 case KeyEvent.KEYCODE_HOME:
-                    if (action == KeyEvent.ACTION_DOWN) {
-                        timer.cancel();
-                        timer.start();
-                    } else if (action == KeyEvent.ACTION_UP) {
-                        if (isTimeout) {
-                            getSharedPref().setBabyMode(false);
-                            EventBus.getDefault().post(new TileServiceEvent(false));
-                        }
-                    }
-                    return true;
                 case KeyEvent.KEYCODE_APP_SWITCH:
                 case KeyEvent.KEYCODE_BACK:
-                    // TODO show Lock icon.
+                    // show Lock icon.
                     if (action == KeyEvent.ACTION_UP) {
                         EventBus.getDefault().post(new KidModeEvent());
                     }
                     return true;
-            }
-        } else {
-            if (keyCode == KeyEvent.KEYCODE_HOME) {
-                if (action == KeyEvent.ACTION_DOWN) {
-                    timer.cancel();
-                    timer.start();
-                } else if (action == KeyEvent.ACTION_UP) {
-                    if (isTimeout) {
-                       getSharedPref().setBabyMode(true);
-                        EventBus.getDefault().post(new TileServiceEvent(true));
-                    }
-                }
             }
         }
 
@@ -123,8 +92,6 @@ public class EventAccessibilityService extends AccessibilityService {
         touchEventView = new TouchEventView(getBaseContext());
         touchEventView.updateParamsForLocation(getWindowManager(), true);
 
-        getSharedPref().setTileState(Tile.STATE_INACTIVE);
-
         // check floating permission
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(getApplicationContext())) {
 //            return;
@@ -151,6 +118,8 @@ public class EventAccessibilityService extends AccessibilityService {
         }
     }
 
+    /// ---------------------------------------------------------------------------- android service
+
     private WindowManager _windowManager;
 
     private WindowManager getWindowManager() {
@@ -171,6 +140,11 @@ public class EventAccessibilityService extends AccessibilityService {
         return _sp;
     }
 
+    /// ------------------------------------------------------------------------ android service end
+
+    /// -------------------------------------------------------------------------------------
+    /// -------------------------------------------------------------------------------------
+
     /// -------------------------------------------------------------------------------------- timer
 
     private final static long NEED_SECONDS_FOR_BABY_MODE = 3000;
@@ -188,13 +162,35 @@ public class EventAccessibilityService extends AccessibilityService {
         @Override
         public void onFinish() {
             isTimeout = true;
+
             if (getSharedPref().isBabyMode()) {
                 Toast.makeText(getApplicationContext(), "아기시청모드가 해제 되었습니다.", Toast.LENGTH_LONG).show();
+
+                // todo TapServiceEvent 명칭 변경이 필요
+                EventBus.getDefault().post(new TapServiceEvent(false));
+                getSharedPref().setBabyMode(false);
+
+                // todo show AdMobActivity
             } else {
                 Toast.makeText(getApplicationContext(), "아기시청모드가 되었습니다.", Toast.LENGTH_LONG).show();
+
+                EventBus.getDefault().post(new TapServiceEvent(true));
+                getSharedPref().setBabyMode(true);
             }
         }
     };
+
+    private void onPressedHomeKey(int action) throws UnknownError {
+        if (action == KeyEvent.ACTION_DOWN) {
+            timer.cancel();
+            timer.start();
+        } else if (action == KeyEvent.ACTION_UP) {
+            timer.cancel();
+        } else {
+            Log.e(TAG, "onPressedHomeKey: unknown action " + action);
+            throw new UnknownError();
+        }
+    }
 
     /// ---------------------------------------------------------------------------------- end timer
 }
