@@ -23,17 +23,17 @@
                 android:resource="@xml/accessibility_service_config" />
         </service>
 
-        <service
-            android:name=".powerswitch.quicksetting.SwitchTileService"
-            android:enabled="true"
-            android:exported="true"
-            android:icon="@drawable/ic_child_care_black_24dp"
-            android:label="@string/baby_watch_mode"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
-            <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE" />
-            </intent-filter>
-        </service>
+<!--        <service-->
+<!--            android:name=".powerswitch.quicksetting.SwitchTileService"-->
+<!--            android:enabled="true"-->
+<!--            android:exported="true"-->
+<!--            android:icon="@drawable/ic_child_care_black_24dp"-->
+<!--            android:label="@string/baby_watch_mode"-->
+<!--            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.service.quicksettings.action.QS_TILE" />-->
+<!--            </intent-filter>-->
+<!--        </service>-->
 
         <activity android:name=".MainActivity"
             android:launchMode="singleTask">
