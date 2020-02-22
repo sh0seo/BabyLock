@@ -9,6 +9,8 @@ public class SharedPreferencesHelper extends ContextWrapper {
 
 //    public final static String KEY_TILE_STATE = "tile_state";
     public final static String KEY_BABY_MODE = "baby_mode";
+    public final static String KEY_BABY_MODE_TAP = "setting_tap";
+    public final static String KEY_BABY_MODE_HOME = "setting_home";
 
     private final static String PREF_NAME = "pref";
 
@@ -37,6 +39,22 @@ public class SharedPreferencesHelper extends ContextWrapper {
 
     public boolean isBabyMode() {
         return getPreferences().getBoolean(KEY_BABY_MODE, false);
+    }
+
+    public boolean enableTapOnBabyMode() {
+        return getPreferences().getBoolean(KEY_BABY_MODE_TAP, true);
+    }
+
+    public void setTapOnBabyMode(boolean enable) {
+        getPreferences().edit().putBoolean(KEY_BABY_MODE_TAP, enable).apply();
+    }
+
+    public boolean enableHomeOnBabyMode() {
+        return getPreferences().getBoolean(KEY_BABY_MODE_HOME, true);
+    }
+
+    public void setHomeOnBabyMode(boolean enable) {
+        getPreferences().edit().putBoolean(KEY_BABY_MODE_HOME, enable).apply();
     }
 
     public void registerChangeListener(SharedPreferences.OnSharedPreferenceChangeListener listener) {

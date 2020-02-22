@@ -42,7 +42,10 @@ public class EventAccessibilityService extends AccessibilityService {
             onPressedHomeKey(action);
         }
 
-        if (getSharedPref().isBabyMode()) {
+        Log.d(TAG, "onKeyEvent:" + getSharedPref().enableTapOnBabyMode() + " : " + getSharedPref().enableHomeOnBabyMode());
+
+        if (getSharedPref().isBabyMode()
+                && getSharedPref().enableHomeOnBabyMode()) {
             switch (keyCode) {
                 case KeyEvent.KEYCODE_HOME:
                 case KeyEvent.KEYCODE_APP_SWITCH:
@@ -80,7 +83,6 @@ public class EventAccessibilityService extends AccessibilityService {
 //        }
 
 //        tileService = new SwitchTileService();
-
 
         PermissionHelper permissionHelper = new PermissionHelper(getApplicationContext());
         if (!permissionHelper.hasSystemAlertWindowsPermission()) {

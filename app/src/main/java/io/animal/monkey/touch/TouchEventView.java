@@ -6,16 +6,17 @@ import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Build;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
-
-import androidx.annotation.Nullable;
+import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -24,6 +25,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import io.animal.monkey.R;
 import io.animal.monkey.bus.events.KidModeEvent;
 import io.animal.monkey.bus.events.TapServiceEvent;
+import io.animal.monkey.util.SharedPreferencesHelper;
 
 public class TouchEventView extends ContextWrapper {
 
@@ -34,7 +36,7 @@ public class TouchEventView extends ContextWrapper {
     private View touchView;
 
     private ImageView kidModeImage;
-    private ImageView stopButton;
+    private ImageView babyButton;
 
     public TouchEventView(Context c) {
         super(c);
@@ -54,20 +56,28 @@ public class TouchEventView extends ContextWrapper {
         touchView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
+                Log.d(TAG, "onTouch:" + event.toString());
+
+                if (getSharedPref().isBabyMode()) {
+                    // show Lock icon.
+                    EventBus.getDefault().post(new KidModeEvent());
+                    return true;
+                }
+
+                return false;
+            }
+        });
+
+        babyButton = touchView.findViewById(R.id.baby_event);
+        babyButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
                 Log.d(TAG, "setOnTouchListener:");
                 return false;
             }
         });
 
-//        stopButton = touchView.findViewById(R.id.stop_button);
-//        stopButton.setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                Log.d(TAG, "setOnTouchListener:");
-//                return false;
-//            }
-//        });
-        kidModeImage = touchView.findViewById(R.id.kid_mode);
+        kidModeImage = touchView.findViewById(R.id.baby_mode);
 //        touchView = new View(getApplicationContext());
 //        touchView.setBackgroundColor(Color.parseColor("#44FF1122"));
     }
@@ -174,11 +184,32 @@ public class TouchEventView extends ContextWrapper {
         getApplicationContext().sendBroadcast(i);
     }
 
+    /// ------------------------------------------------------------------------ android service end
+
+    /// ---------------------------------------------------------------------------- android service
+
+    private WindowManager _windowManager;
+
     private WindowManager getWindowManager() {
-        return (WindowManager) getSystemService(Service.WINDOW_SERVICE);
+        if (_windowManager == null) {
+            _windowManager = (WindowManager) getSystemService(Service.WINDOW_SERVICE);
+        }
+
+        return _windowManager;
+    }
+
+    private SharedPreferencesHelper _sp;
+
+    private SharedPreferencesHelper getSharedPref() {
+        if (_sp == null) {
+            _sp = new SharedPreferencesHelper(getApplicationContext());
+        }
+
+        return _sp;
     }
 
     /// ------------------------------------------------------------------------ android service end
+
 
     /// -------------------------------------------------------------------------- EventBus Listener
 
@@ -197,12 +228,19 @@ public class TouchEventView extends ContextWrapper {
         Log.d(TAG, "onTapServiceEvent:" + event.toString());
 
         if (event.isEnable()) {
-            // Service Started
-            // Ignore user'touch event at service start
-            getWindowManager().updateViewLayout(getTouchView(), updateTouchViewParams());
+            babyButton.setAlpha(0.7f);
 
+            if (getSharedPref().enableTapOnBabyMode()) {
+                // Service Started
+                // Ignore user'touch event at service start
+                getWindowManager().updateViewLayout(getTouchView(), updateTouchViewParams());
+            }
+
+            // 화면에 존재할 시스템 다이얼로그 dismiss
             sendBroadcastCloseSystemDialog();
         } else {
+            babyButton.setAlpha(0.0f);
+
             // Service ended
             // Enable user'touch event at service end
             getWindowManager().updateViewLayout(getTouchView(), createTouchViewParams());

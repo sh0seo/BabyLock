@@ -1,16 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <Preference
-        app:key="information"
-        app:title="정보"
-        app:icon="@drawable/ic_more_horiz_black_24dp" />
+    <PreferenceCategory
+        app:title="아기모드 설정"
+        app:iconSpaceReserved="false">
 
-    <Preference
-        app:key="information"
-        app:title="version"
-        app:summary="@string/app_version"
-        app:icon="@drawable/ic_settings_black_24dp" />
+        <SwitchPreferenceCompat
+            app:key="setting_tap"
+            app:title="화면잠금"
+            app:summary="아기모드 상태에서 화면잠금 기능 사용"
+            app:icon="@drawable/ic_more_horiz_black_24dp"
+            app:defaultValue="true"/>
+
+        <SwitchPreferenceCompat
+            app:key="setting_home"
+            app:title="버튼잠금"
+            app:summary="아기모드 상태에서 홈, 메뉴, 뒤로가기 버튼 기능을 잠금"
+            app:icon="@drawable/ic_more_horiz_black_24dp"
+            app:defaultValue="true"/>
+
+        <SeekBarPreference
+            app:key="setting_delay"
+            app:title="시작시간"
+            app:summary="아기모드가 시작하기 전까지 딜레이 시간"
+            app:defaultValue="0"
+            app:min="0"
+            app:seekBarIncrement="1"
+            app:icon="@drawable/ic_child_care_black_24dp" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:title="앱 정보"
+        app:iconSpaceReserved="false">
+        <Preference
+            app:key="information"
+            app:title="정보"
+            app:icon="@drawable/ic_more_horiz_black_24dp" />
+
+        <Preference
+            app:key="information"
+            app:title="version"
+            app:summary="@string/app_version"
+            app:icon="@drawable/ic_settings_black_24dp" />
+    </PreferenceCategory>
+</PreferenceScreen>
+
 <!--    <CheckBoxPreference-->
 <!--        app:key="lock_screen"-->
 <!--        app:icon="@drawable/ic_clear"-->
@@ -42,4 +76,3 @@
 <!--    </PreferenceCategory>-->
 
 
-</PreferenceScreen>
