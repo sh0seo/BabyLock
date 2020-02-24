@@ -98,6 +98,11 @@ public class AdMobActivity extends AppCompatActivity {
             @Override
             public void onAdClosed() {
                 Log.d(TAG, "onAdClosed");
+
+                // baby mode disable
+                EventBus.getDefault().post(new TapServiceEvent(false));
+                getSharedPref().setBabyMode(false);
+
                 finish();
             }
         });

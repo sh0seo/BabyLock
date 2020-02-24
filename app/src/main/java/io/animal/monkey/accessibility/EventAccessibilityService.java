@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 
+import io.animal.monkey.AdMobActivity;
 import io.animal.monkey.bus.events.KidModeEvent;
 import io.animal.monkey.bus.events.TapServiceEvent;
 import io.animal.monkey.touch.TouchEventView;
@@ -163,11 +164,9 @@ public class EventAccessibilityService extends AccessibilityService {
             if (getSharedPref().isBabyMode()) {
                 Toast.makeText(getApplicationContext(), "아기시청모드가 해제 되었습니다.", Toast.LENGTH_LONG).show();
 
-                // todo TapServiceEvent 명칭 변경이 필요
-                EventBus.getDefault().post(new TapServiceEvent(false));
-                getSharedPref().setBabyMode(false);
-
                 // todo show AdMobActivity
+                Intent intent = new Intent(getBaseContext(), AdMobActivity.class);
+                startActivity(intent);
             } else {
                 Toast.makeText(getApplicationContext(), "아기시청모드가 되었습니다.", Toast.LENGTH_LONG).show();
 
