@@ -3,6 +3,8 @@ package io.animal.monkey;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -21,7 +23,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import io.animal.monkey.bus.events.AlertBoxStatusEvent;
 import io.animal.monkey.setting.SettingFragment;
 import io.animal.monkey.ui.alert.PermissionFragment;
-import io.animal.monkey.ui.alert.TileServiceGuideFragment;
+import io.animal.monkey.ui.alert.AppGuideFragment;
 import io.animal.monkey.util.PermissionHelper;
 import io.animal.monkey.util.SharedPreferencesHelper;
 
@@ -31,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     private SettingFragment settingFragment;
 
-    private TileServiceGuideFragment tileServiceGuideFragment;
+    private AppGuideFragment appGuideFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
         settingFragment = new SettingFragment();
         permissionFragment = new PermissionFragment();
-        tileServiceGuideFragment = new TileServiceGuideFragment();
+        appGuideFragment = new AppGuideFragment();
 
 //        ImageView logo = findViewById(R.id.logo);
 //
@@ -58,6 +60,11 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.content_container, settingFragment)
                     .commitNow();
+
+            // App 사용 가이드를 본적이 없다면 Guide
+            if (!getSharedPref().getGuided()) {
+                showAppGuide();
+            }
         }
 
 //        try {
@@ -78,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
 //            Log.e(TAG, e.getMessage());
 //        }
 
-        initializeAdMob();
+//        initializeAdMob();
 
         EventBus.getDefault().register(this);
     }
@@ -100,7 +107,6 @@ public class MainActivity extends AppCompatActivity {
             onInitializeSharedPref();
 
             showPermissionAlertBox();
-//           testShowTileServiceGuide();
         }
     }
 
@@ -151,14 +157,21 @@ public class MainActivity extends AppCompatActivity {
 //        alertDialog.show();
     }
 
-    private void testShowTileServiceGuide() {
-        if (tileServiceGuideFragment.isAdded() && tileServiceGuideFragment.isVisible()) {
+    private void showAppGuide() {
+        if (getSharedPref().getGuided()) {
             return;
         }
 
-        tileServiceGuideFragment.show(
-                getSupportFragmentManager().beginTransaction(),
-                TileServiceGuideFragment.TAG);
+        if (appGuideFragment.isAdded() && appGuideFragment.isVisible()) {
+            return;
+        }
+
+        appGuideFragment.show(getSupportFragmentManager().beginTransaction(), AppGuideFragment.TAG);
+    }
+
+    private void dismissAppGuide() {
+//        appGuideFragment.show(getSupportFragmentManager().beginTransaction(), AppGuideFragment.TAG);
+        getSupportFragmentManager().beginTransaction().hide(appGuideFragment);
     }
 
     private View getRootView() {
@@ -184,69 +197,69 @@ public class MainActivity extends AppCompatActivity {
 
     /// -------------------------------------------------------------------------------------- AdMob
 
-    // AdMob
-    private InterstitialAd mInterstitialAd;
-
-    private void initializeAdMob() {
-        // Initialize the Mobile Ads SDK.
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {}
-        });
-
-        // Create the InterstitialAd and set the adUnitId.
-        mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId(getString(R.string.banner_ad_unit_id_for_full_test));
-        mInterstitialAd.loadAd(new AdRequest.Builder().build());
-
-        mInterstitialAd.setAdListener(new AdListener() {
-            @Override
-            public void onAdLoaded() {
-                // Code to be executed when an ad finishes loading.
-                Log.d(TAG, "onAdLoaded");
-            }
-
-            @Override
-            public void onAdFailedToLoad(int errorCode) {
-                // Code to be executed when an ad request fails.
-                Log.d(TAG, "onAdFailedToLoad");
-            }
-
-            @Override
-            public void onAdOpened() {
-                // Code to be executed when the ad is displayed.
-                Log.d(TAG, "onAdOpended");
-            }
-
-            @Override
-            public void onAdClicked() {
-                // Code to be executed when the user clicks on an ad.
-                Log.d(TAG, "onAdClicked");
-            }
-
-            @Override
-            public void onAdLeftApplication() {
-                // Code to be executed when the user has left the app.
-                Log.d(TAG, "onAdLeftApplication");
-            }
-
-            @Override
-            public void onAdClosed() {
-                Log.d(TAG, "onAdClosed");
-
-                // load next ad.
-                mInterstitialAd.loadAd(new AdRequest.Builder().build());
-
-                // todo stop service
-            }
-        });
-    }
-
-    private void showInterstitial() {
-        if (mInterstitialAd != null && mInterstitialAd.isLoaded()) {
-            mInterstitialAd.show();
-        }
-    }
+//    // AdMob
+//    private InterstitialAd mInterstitialAd;
+//
+//    private void initializeAdMob() {
+//        // Initialize the Mobile Ads SDK.
+//        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+//            @Override
+//            public void onInitializationComplete(InitializationStatus initializationStatus) {}
+//        });
+//
+//        // Create the InterstitialAd and set the adUnitId.
+//        mInterstitialAd = new InterstitialAd(this);
+//        mInterstitialAd.setAdUnitId(getString(R.string.banner_ad_unit_id_for_full_test));
+//        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+//
+//        mInterstitialAd.setAdListener(new AdListener() {
+//            @Override
+//            public void onAdLoaded() {
+//                // Code to be executed when an ad finishes loading.
+//                Log.d(TAG, "onAdLoaded");
+//            }
+//
+//            @Override
+//            public void onAdFailedToLoad(int errorCode) {
+//                // Code to be executed when an ad request fails.
+//                Log.d(TAG, "onAdFailedToLoad");
+//            }
+//
+//            @Override
+//            public void onAdOpened() {
+//                // Code to be executed when the ad is displayed.
+//                Log.d(TAG, "onAdOpended");
+//            }
+//
+//            @Override
+//            public void onAdClicked() {
+//                // Code to be executed when the user clicks on an ad.
+//                Log.d(TAG, "onAdClicked");
+//            }
+//
+//            @Override
+//            public void onAdLeftApplication() {
+//                // Code to be executed when the user has left the app.
+//                Log.d(TAG, "onAdLeftApplication");
+//            }
+//
+//            @Override
+//            public void onAdClosed() {
+//                Log.d(TAG, "onAdClosed");
+//
+//                // load next ad.
+//                mInterstitialAd.loadAd(new AdRequest.Builder().build());
+//
+//                // todo stop service
+//            }
+//        });
+//    }
+//
+//    private void showInterstitial() {
+//        if (mInterstitialAd != null && mInterstitialAd.isLoaded()) {
+//            mInterstitialAd.show();
+//        }
+//    }
 
     /// ---------------------------------------------------------------------------------- AdMob end
 }

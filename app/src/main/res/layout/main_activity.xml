@@ -25,6 +25,12 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+        <LinearLayout
+            android:descendantFocusability="blocksDescendants"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/main_container"
             android:layout_width="match_parent"
@@ -195,6 +201,7 @@
                 />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
 <!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->

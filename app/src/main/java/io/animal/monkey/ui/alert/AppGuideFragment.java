@@ -10,9 +10,9 @@ import androidx.fragment.app.DialogFragment;
 
 import io.animal.monkey.R;
 
-public class TileServiceGuideFragment extends DialogFragment {
+public class AppGuideFragment extends DialogFragment {
 
-    public final static String TAG = "TileServiceGuideFragment";
+    public final static String TAG = "AppGuideFragment";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -29,10 +29,22 @@ public class TileServiceGuideFragment extends DialogFragment {
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TileServiceGuideFragment.super.dismiss();
+                AppGuideFragment.super.dismiss();
             }
         });
 
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+//
+//        Dialog dialog = getDialog();
+//        if (dialog != null) {
+//            int width = ViewGroup.LayoutParams.MATCH_PARENT;
+//            int height = ViewGroup.LayoutParams.MATCH_PARENT;
+//            dialog.getWindow().setLayout(width, height);
+//        }
     }
 }

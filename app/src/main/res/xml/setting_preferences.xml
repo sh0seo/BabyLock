@@ -19,14 +19,14 @@
             app:icon="@drawable/ic_more_horiz_black_24dp"
             app:defaultValue="true"/>
 
-        <SeekBarPreference
-            app:key="setting_delay"
-            app:title="시작시간"
-            app:summary="아기모드가 시작하기 전까지 딜레이 시간"
-            app:defaultValue="0"
-            app:min="0"
-            app:seekBarIncrement="1"
-            app:icon="@drawable/ic_child_care_black_24dp" />
+<!--        <SeekBarPreference-->
+<!--            app:key="setting_delay"-->
+<!--            app:title="시작시간"-->
+<!--            app:summary="아기모드가 시작하기 전까지 딜레이 시간"-->
+<!--            app:defaultValue="0"-->
+<!--            app:min="0"-->
+<!--            app:seekBarIncrement="1"-->
+<!--            app:icon="@drawable/ic_child_care_black_24dp" />-->
     </PreferenceCategory>
 
     <PreferenceCategory
