@@ -191,7 +191,6 @@
                 android:id="@+id/content_container"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:background="@drawable/border"
                 app:layout_constraintTop_toBottomOf="@+id/logo_container"
                 />
         </androidx.constraintlayout.widget.ConstraintLayout>

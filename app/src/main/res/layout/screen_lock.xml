@@ -8,19 +8,20 @@
     android:background="@android:color/transparent">
     <!-- receive hardware-key event. -->
     <ImageButton
-        android:id="@+id/stop_button"
+        android:id="@+id/baby_event"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@drawable/ic_child_care_black_24dp"
+        android:src="@drawable/ic_child_care_white_24dp"
         android:background="@drawable/circle_shape"
-        android:alpha="0.0"
         android:layout_marginTop="50dp"
+        android:alpha="0.7"
+        android:visibility="invisible"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <!-- receive hardware-key event. -->
     <ImageView
-        android:id="@+id/kid_mode"
+        android:id="@+id/baby_mode"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:src="@drawable/ic_clear"
@@ -30,4 +31,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
