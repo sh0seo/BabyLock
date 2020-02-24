@@ -95,20 +95,30 @@ public class PermissionFragment extends DialogFragment {
             return;
         }
 
+        // 권한 체크는 Floating 부터.
+        // Accessibility 는 Floating 권한이 존재하면 그 다음에 확인
         if (permissionHelper.hasSystemAlertWindowsPermission()) {
             floatingPermission.setChecked(true);
-            floatingPermission.setClickable(false);
+            floatingPermission.setEnabled(false);
         } else {
             floatingPermission.setChecked(false);
-            floatingPermission.setClickable(true);
+            floatingPermission.setEnabled(true);
         }
 
-        if (permissionHelper.isAccessibilitySettingsOn()) {
-            accessibility.setChecked(true);
-            accessibility.setClickable(false);
+        if (permissionHelper.hasSystemAlertWindowsPermission()) {
+            if (permissionHelper.isAccessibilitySettingsOn()) {
+                accessibility.setChecked(true);
+                accessibility.setEnabled(false);
+            } else {
+                accessibility.setChecked(false);
+                accessibility.setEnabled(true);
+            }
         } else {
-            accessibility.setChecked(false);
-            accessibility.setClickable(true);
+            accessibility.setEnabled(false);
+
+            if (permissionHelper.isAccessibilitySettingsOn()) {
+                accessibility.setChecked(true);
+            }
         }
     }
 
