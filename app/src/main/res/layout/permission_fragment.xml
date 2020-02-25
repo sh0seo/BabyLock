@@ -31,28 +31,74 @@
             android:paddingLeft="20dp"
             android:paddingRight="20dp">
 
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_launcher_round"
+                android:layout_marginTop="30dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                />
+
+            <TextView
+                android:id="@+id/full_access_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="앱 사용 권한 확인"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toBottomOf="@id/logo"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
+
+            <TextView
+                android:id="@+id/full_access_detail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="BabyLock 앱을 사용하기 위해서는 2개의 앱 사용 권한 허용이 필요합니다"
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toBottomOf="@id/full_access_title"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
+
             <CheckedTextView
                 android:id="@+id/floating_permission"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Floating permission Status"
+                android:text="화면 위에서 표시되는 권한"
                 android:checkMark="?android:attr/listChoiceIndicatorMultiple"
                 android:gravity="center"
                 android:textSize="15sp"
-                android:layout_marginTop="20dp"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_marginTop="30dp"
+                app:layout_constraintTop_toBottomOf="@+id/full_access_detail" />
 
             <CheckedTextView
                 android:id="@+id/accessibility_permission"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Accessibility permission Status"
+                android:text="버튼(메뉴, 홈, 뒤로가기)의 제어 권한"
                 android:checkMark="?android:attr/listChoiceIndicatorMultiple"
                 android:gravity="center"
                 android:textSize="15sp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="40dp"
                 app:layout_constraintTop_toBottomOf="@+id/floating_permission"/>
 
+            <TextView
+                android:id="@+id/accessibility_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="right"
+                android:text="접근성 권한은 설정 -> 접근성 -> 서비스(BabyLock)로 이동"
+                android:textStyle="italic"
+                android:textSize="15sp"
+                android:layout_marginTop="10dp"
+                android:textColor="@android:color/darker_gray"
+                app:layout_constraintTop_toBottomOf="@id/accessibility_permission"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
 <!--            <Button-->
 <!--                android:id="@+id/overlay_test"-->
 <!--                android:layout_width="wrap_content"-->

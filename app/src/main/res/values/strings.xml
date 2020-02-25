@@ -8,5 +8,5 @@
     <string name="banner_ad_unit_id_for_full_test">ca-app-pub-3940256099942544/1033173712</string>
 
     <string name="baby_watch_mode">Baby Watching Mode</string>
-    <string name="accessibility_service_description">Test Test Test Settings -> Accessibility -> Service -> BabyLock is checked.</string>
+    <string name="accessibility_service_description">To use Baby Watch Mode, you need to have access to accessibility services. The BabyLock app does not collect or use any personal information.</string>
 </resources>
