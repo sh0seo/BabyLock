@@ -3,6 +3,7 @@ package io.animal.monkey.ui.guide;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,8 +79,11 @@ public class AppGuideFragment extends DialogFragment {
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) {
-                if (viewPager.getCurrentItem() < adapter.getCount()) {
+                Log.d(TAG, "" + viewPager.getCurrentItem() +  adapter.getCount());
+                if (viewPager.getCurrentItem() < (adapter.getCount() - 1)) {
                     viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
+                } else {
+                    AppGuideFragment.super.dismiss();
                 }
             }
         });

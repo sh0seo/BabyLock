@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.annotation.StringRes;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import io.animal.monkey.R;
@@ -77,7 +78,12 @@ public class SliderItemFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         // set page background
-        view.setBackground(requireActivity().getDrawable(BG_IMAGE[position]));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            view.setBackground(requireActivity().getDrawable(BG_IMAGE[position]));
+        } else {
+            view.setBackground(ContextCompat.getDrawable(getContext(), BG_IMAGE[position]));
+        }
+
         TextView title = view.findViewById(R.id.textView);
         TextView titleText = view.findViewById(R.id.textView2);
         ImageView imageView = view.findViewById(R.id.imageView);

@@ -13,14 +13,14 @@
 
     <string name="next">다음</string>
 
-    <string name="discover">Discover</string>
-    <string name="shop">Shop</string>
-    <string name="offers">Offers</string>
+    <string name="discover">BabyLock?</string>
+    <string name="shop">동작하는 방법</string>
+    <string name="offers">해지하는 방법</string>
     <string name="rewards">Rewards</string>
 
-    <string name="what_is_the_baby_text">BabyLock은 youtube 시청 동안 화면, 버튼을 잠그는 앱</string>
-    <string name="ensable_baby_mode_text">홈버튼을 3초 동안 탭하면 아기시청 모드로 진입</string>
-    <string name="disable_baby_mode_text">홈버튼을 다시 3초 탭하면 아기시청 모드가 해지</string>
+    <string name="what_is_the_baby_text">화면 터치, 버튼을 잠금 기능을 제공</string>
+    <string name="ensable_baby_mode_text">홈버튼을 3초 동안 누르면 아기시청 모드 진입</string>
+    <string name="disable_baby_mode_text">홈버튼을 다시 3초 누르면 아기시청 모드 해지</string>
 
     <string name="get_started">시작</string>
 </resources>

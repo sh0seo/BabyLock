@@ -168,6 +168,7 @@ public class EventAccessibilityService extends AccessibilityService {
 
                 // todo show AdMobActivity
                 Intent intent = new Intent(getBaseContext(), AdMobActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             } else {
                 Toast.makeText(getApplicationContext(), "아기시청모드가 되었습니다.", Toast.LENGTH_LONG).show();
