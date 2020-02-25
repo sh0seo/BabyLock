@@ -9,4 +9,15 @@
 
     <string name="baby_watch_mode">Baby Watching Mode</string>
     <string name="accessibility_service_description">To use Baby Watch Mode, you need to have access to accessibility services. The BabyLock app does not collect or use any personal information.</string>
+
+    <string name="next">Next</string>
+    <string name="discover">Discover</string>
+    <string name="shop">Shop</string>
+    <string name="offers">Offers</string>
+    <string name="rewards">Rewards</string>
+    <string name="discover_text">Look for things around you</string>
+    <string name="shop_text"><![CDATA[Get the best deals & Coupons]]></string>
+    <string name="offers_text">Find great offers while you discover</string>
+    <string name="rewards_text"><![CDATA[Free recharge coupons & more]]></string>
+    <string name="get_started">Get Started</string>
 </resources>

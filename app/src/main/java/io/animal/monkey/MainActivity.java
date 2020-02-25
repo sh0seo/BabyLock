@@ -1,20 +1,10 @@
 package io.animal.monkey;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Dialog;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.InterstitialAd;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -23,7 +13,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import io.animal.monkey.bus.events.AlertBoxStatusEvent;
 import io.animal.monkey.setting.SettingFragment;
 import io.animal.monkey.ui.alert.PermissionFragment;
-import io.animal.monkey.ui.alert.AppGuideFragment;
+import io.animal.monkey.ui.guide.AppGuideFragment;
 import io.animal.monkey.util.PermissionHelper;
 import io.animal.monkey.util.SharedPreferencesHelper;
 

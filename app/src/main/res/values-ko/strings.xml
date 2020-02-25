@@ -10,4 +10,15 @@
 
     <string name="baby_watch_mode">아기시청 모드</string>
     <string name="accessibility_service_description">아기시청 모드를 사용하기 위해서는 접근성 서비스에 대한 사용자 권한이 필요합니다. BabyLock 앱에서는 어떠한 개인 정보를 수집, 사용하지 않습니다.</string>
+
+    <string name="next">Next</string>
+    <string name="discover">Discover</string>
+    <string name="shop">Shop</string>
+    <string name="offers">Offers</string>
+    <string name="rewards">Rewards</string>
+    <string name="discover_text">Look for things around you</string>
+    <string name="shop_text"><![CDATA[Get the best deals & Coupons]]></string>
+    <string name="offers_text">Find great offers while you discover</string>
+    <string name="rewards_text"><![CDATA[Free recharge coupons & more]]></string>
+    <string name="get_started">Get Started</string>
 </resources>
