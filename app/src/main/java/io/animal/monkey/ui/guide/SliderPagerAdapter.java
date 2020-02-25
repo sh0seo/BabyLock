@@ -7,6 +7,8 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 public class SliderPagerAdapter extends FragmentPagerAdapter {
 
+    private final static int MAX_PAGER = 3;
+
     public SliderPagerAdapter(@NonNull FragmentManager fm, int behavior) {
         super(fm, behavior);
     }
@@ -19,6 +21,6 @@ public class SliderPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 4;
+        return MAX_PAGER;
     }
 }

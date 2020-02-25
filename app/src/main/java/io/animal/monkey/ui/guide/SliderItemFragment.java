@@ -27,7 +27,7 @@ public class SliderItemFragment extends Fragment {
     @StringRes
     private static final int[] PAGE_TEXT =
             new int[] {
-                    R.string.discover_text, R.string.shop_text, R.string.offers_text, R.string.rewards_text
+                    R.string.what_is_the_baby_text, R.string.ensable_baby_mode_text, R.string.disable_baby_mode_text
             };
     // prepare all subtitle images arrays
     @StringRes

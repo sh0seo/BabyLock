@@ -48,7 +48,7 @@ public class AppGuideFragment extends DialogFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        View view = inflater.inflate(R.layout.tile_service_guide_fragment, container, false);
+        View view = inflater.inflate(R.layout.app_guide_fragment, container, false);
 
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
