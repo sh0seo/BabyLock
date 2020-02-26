@@ -23,7 +23,7 @@ public class SliderItemFragment extends Fragment {
     // prepare all title ids arrays
     @StringRes
     private static final int[] PAGE_TITLES =
-            new int[] { R.string.discover, R.string.shop, R.string.offers, R.string.rewards };
+            new int[] { R.string.discover, R.string.shop, R.string.offers };
     // prepare all subtitle ids arrays
     @StringRes
     private static final int[] PAGE_TEXT =
@@ -34,14 +34,14 @@ public class SliderItemFragment extends Fragment {
     @StringRes
     private static final int[] PAGE_IMAGE =
             new int[] {
-                    R.drawable.ic_discover, R.drawable.ic_deals, R.drawable.ic_offers, R.drawable.ic_reward
+                    R.drawable.ic_discover, R.drawable.ic_deals, R.drawable.ic_offers
             };
     // prepare all background images arrays
-    @StringRes
-    private static final int[] BG_IMAGE = new int[] {
-            R.drawable.ic_bg_red, R.drawable.ic_bg_blue, R.drawable.ic_bg_green,
-            R.drawable.ic_bg_purple
-    };
+//    @StringRes
+//    private static final int[] BG_IMAGE = new int[] {
+//            R.drawable.ic_bg_red, R.drawable.ic_bg_blue, R.drawable.ic_bg_green
+//    };
+
     private int position;
     public SliderItemFragment() {
         // Required empty public constructor
@@ -78,11 +78,12 @@ public class SliderItemFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         // set page background
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            view.setBackground(requireActivity().getDrawable(BG_IMAGE[position]));
-        } else {
-            view.setBackground(ContextCompat.getDrawable(getContext(), BG_IMAGE[position]));
-        }
+        // unused background
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            view.setBackground(requireActivity().getDrawable(BG_IMAGE[position]));
+//        } else {
+//            view.setBackground(ContextCompat.getDrawable(getContext(), BG_IMAGE[position]));
+//        }
 
         TextView title = view.findViewById(R.id.textView);
         TextView titleText = view.findViewById(R.id.textView2);

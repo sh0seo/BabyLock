@@ -4,6 +4,7 @@ import android.accessibilityservice.AccessibilityService;
 import android.app.Service;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.CountDownTimer;
 import android.provider.Settings;
 import android.service.quicksettings.Tile;
@@ -34,6 +35,7 @@ public class EventAccessibilityService extends AccessibilityService {
     protected boolean onKeyEvent(KeyEvent event) {
         Log.d(TAG, "onKeyEvent(" + event.toString() + ")");
 
+        String model = Build.MODEL;
         final int keyCode = event.getKeyCode();
         final int action = event.getAction();
 
@@ -92,8 +94,8 @@ public class EventAccessibilityService extends AccessibilityService {
             return;
         }
 
-        touchEventView = new TouchEventView(getBaseContext());
-        touchEventView.updateParamsForLocation(getWindowManager(), true);
+//        touchEventView = new TouchEventView(getBaseContext());
+//        touchEventView.updateParamsForLocation(getWindowManager(), true);
 
         // check floating permission
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(getApplicationContext())) {

@@ -1,14 +1,22 @@
 package io.animal.monkey;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
+import android.content.DialogInterface;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.Arrays;
 
 import io.animal.monkey.bus.events.AlertBoxStatusEvent;
 import io.animal.monkey.setting.SettingFragment;
@@ -50,11 +58,6 @@ public class MainActivity extends AppCompatActivity {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.content_container, settingFragment)
                     .commitNow();
-
-            // App 사용 가이드를 본적이 없다면 Guide
-            if (!getSharedPref().getGuided()) {
-                showAppGuide();
-            }
         }
 
 //        try {
@@ -91,12 +94,34 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
+        // check model
+        boolean notSupportedDevice = Arrays.asList(getNotSupportedModels()).contains(Build.MODEL);
+        if (notSupportedDevice) {
+            new MaterialAlertDialogBuilder(this)
+                    .setTitle("알림")
+                    .setMessage("제조사에서 필요한 기능을 제공하지 않는 모델입니다.")
+                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            finish();
+                        }
+                    })
+                    .setCancelable(false)
+                    .show();
+            return;
+        }
+
         PermissionHelper permissionHelper = new PermissionHelper(this);
         if (!permissionHelper.hasSystemAlertWindowsPermission()
                 || !permissionHelper.isAccessibilitySettingsOn()) {
             onInitializeSharedPref();
 
             showPermissionAlertBox();
+        }
+
+        // App 사용 가이드를 본적이 없다면 Guide
+        if (!getSharedPref().getGuided()) {
+            showAppGuide();
         }
     }
 
@@ -184,6 +209,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /// ----------------------------------------------------------------------------- SharedPref end
+
+    /// ----------------------------------------------------------------------------------- Resource
+
+    private String[] getNotSupportedModels() {
+        return getResources().getStringArray(getNotSupportedModel());
+    }
+
+    @SuppressLint("ResourceType")
+    private int getNotSupportedModel() {
+        return R.array.not_supported_model;
+    }
+    /// ------------------------------------------------------------------------------- Resource end
 
     /// -------------------------------------------------------------------------------------- AdMob
 

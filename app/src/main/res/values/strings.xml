@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">_\u0020BabyLock</string>
+    <string name="app_name">\u0020BabyLock</string>
     <string name="app_version">1.0.0</string>
 
     <string name="admob_app_id">ca-app-pub-2571675041295621~2009914968</string>
@@ -15,7 +15,6 @@
     <string name="discover">Discover</string>
     <string name="shop">Shop</string>
     <string name="offers">Offers</string>
-    <string name="rewards">Rewards</string>
 
     <string name="what_is_the_baby_text">BabyLock is an app that locks the screen and buttons while watching youtube</string>
     <string name="ensable_baby_mode_text">Tap the home button for 3 seconds to enter baby watch mode</string>
