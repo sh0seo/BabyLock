@@ -66,15 +66,17 @@ public class AdMobActivity extends AppCompatActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        EventBus.getDefault().post(new TapServiceEvent(false));
+                        onBabyModeOff();
                     }
-                }, 2000);
+                }, 1000);
             }
 
             @Override
             public void onAdFailedToLoad(int errorCode) {
                 // Code to be executed when an ad request fails.
                 Log.d(TAG, "onAdFailedToLoad");
+
+                onBabyModeOff();
             }
 
             @Override
@@ -100,8 +102,7 @@ public class AdMobActivity extends AppCompatActivity {
                 Log.d(TAG, "onAdClosed");
 
                 // baby mode disable
-                EventBus.getDefault().post(new TapServiceEvent(false));
-                getSharedPref().setBabyMode(false);
+                onBabyModeOff();
 
                 finish();
             }
@@ -129,4 +130,9 @@ public class AdMobActivity extends AppCompatActivity {
     }
 
     /// ---------------------------------------------------------------------- SharedPreferences end
+
+    private void onBabyModeOff() {
+        EventBus.getDefault().post(new TapServiceEvent(false));
+        getSharedPref().setBabyMode(false);
+    }
 }
