@@ -19,6 +19,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.tabs.TabLayout;
 
 import io.animal.monkey.R;
+import io.animal.monkey.util.SharedPreferencesHelper;
 
 public class AppGuideFragment extends DialogFragment {
 
@@ -83,6 +84,9 @@ public class AppGuideFragment extends DialogFragment {
                 if (viewPager.getCurrentItem() < (adapter.getCount() - 1)) {
                     viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
                 } else {
+                    // Checked AppGuide
+                    getSharedPref().setGuided(true);
+
                     AppGuideFragment.super.dismiss();
                 }
             }
@@ -110,11 +114,32 @@ public class AppGuideFragment extends DialogFragment {
         return view;
     }
 
-    private void changeStatusBarColor() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getActivity().getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(Color.TRANSPARENT);
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        // reload
+        viewPager.setCurrentItem(0);
+    }
+
+    /// --------------------------------------------------------------------------------- SharedPref
+
+    private SharedPreferencesHelper _sp;
+
+    private SharedPreferencesHelper getSharedPref() {
+        if (_sp == null) {
+            _sp = new SharedPreferencesHelper(getContext());
         }
+        return _sp;
+    }
+
+    /// ----------------------------------------------------------------------------- SharedPref end
+
+    private void changeStatusBarColor() {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            Window window = getActivity().getWindow();
+//            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//            window.setStatusBarColor(Color.TRANSPARENT);
+//        }
     }
 }

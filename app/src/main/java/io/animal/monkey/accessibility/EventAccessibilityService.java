@@ -94,8 +94,8 @@ public class EventAccessibilityService extends AccessibilityService {
             return;
         }
 
-//        touchEventView = new TouchEventView(getBaseContext());
-//        touchEventView.updateParamsForLocation(getWindowManager(), true);
+        touchEventView = new TouchEventView(getBaseContext());
+        touchEventView.updateParamsForLocation(getWindowManager(), true);
 
         // check floating permission
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(getApplicationContext())) {

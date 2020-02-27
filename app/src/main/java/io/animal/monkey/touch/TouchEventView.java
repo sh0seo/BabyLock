@@ -6,17 +6,14 @@ import android.content.ContextWrapper;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Build;
-import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -78,35 +75,11 @@ public class TouchEventView extends ContextWrapper {
         });
 
         kidModeImage = touchView.findViewById(R.id.baby_mode);
-//        touchView = new View(getApplicationContext());
-//        touchView.setBackgroundColor(Color.parseColor("#44FF1122"));
     }
-
-//    public void updateMiniTouchGestureHeight(@Nullable Integer heightPx) {
-//        miniTouchGestureHeight = heightPx;
-//    }
 
     public void updateParamsForLocation(WindowManager windowManager, Boolean isPortrait) {
         WindowManager w = (WindowManager) getSystemService(Service.WINDOW_SERVICE);
         w.addView(touchView, createTouchViewParams());
-
-//        if (isPortrait) {
-//            miniTouchGestureHeight = SPFManager.getTouchviewPortraitHeight(getApplicationContext());
-            //transparent color
-//            windowManager.addView(touchView,
-//                    createTouchViewParams(
-//                            SPFManager.getTouchviewPortraitHeight(getApplicationContext()),
-//                            SPFManager.getTouchviewPortraitWidth(getApplicationContext()),
-//                            SPFManager.getTouchviewPortraitPosition(getApplicationContext())));
-//        } else {
-//            miniTouchGestureHeight = SPFManager.getTouchviewLandscapeHeight(getApplicationContext());
-            //transparent color
-//            windowManager.addView(touchView,
-//                    createTouchViewParams(
-//                            SPFManager.getTouchviewLandscapeHeight(getApplicationContext()),
-//                            SPFManager.getTouchviewLandscapeWidth(getApplicationContext()),
-//                            SPFManager.getTouchviewLandscapePosition(getApplicationContext())));
-//        }
     }
 
     /**

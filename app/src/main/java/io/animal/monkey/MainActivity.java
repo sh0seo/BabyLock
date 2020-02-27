@@ -19,6 +19,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.Arrays;
 
 import io.animal.monkey.bus.events.AlertBoxStatusEvent;
+import io.animal.monkey.bus.events.AppGuideEvent;
 import io.animal.monkey.setting.SettingFragment;
 import io.animal.monkey.ui.alert.PermissionFragment;
 import io.animal.monkey.ui.guide.AppGuideFragment;
@@ -42,43 +43,11 @@ public class MainActivity extends AppCompatActivity {
         permissionFragment = new PermissionFragment();
         appGuideFragment = new AppGuideFragment();
 
-//        ImageView logo = findViewById(R.id.logo);
-//
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-//            logo.setBackground(new ShapeDrawable(new OvalShape()));
-//        } else {
-//            logo.setBackgroundDrawable(new ShapeDrawable(new OvalShape()));
-//        }
-//
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            logo.setClipToOutline(true);
-//        }
-
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.content_container, settingFragment)
                     .commitNow();
         }
-
-//        try {
-//            ActionBar actionBar = getSupportActionBar();
-//            if (actionBar != null) {
-                // app icon
-//                actionBar.setIcon(R.drawable.ic_child_care_black_24dp);
-//                actionBar.setDisplayUseLogoEnabled(true);
-//                actionBar.setDisplayShowHomeEnabled(true);
-
-                // Rubik font
-//                SpannableString s = new SpannableString(" BABYLOCK");
-//                s.setSpan(new TypefaceSpan("rubik_black.ttf"), 0, s.length(),
-//                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-//                actionBar.setTitle(s);
-//            }
-//        } catch (Exception e) {
-//            Log.e(TAG, e.getMessage());
-//        }
-
-//        initializeAdMob();
 
         EventBus.getDefault().register(this);
     }
@@ -97,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         // check model
         boolean notSupportedDevice = Arrays.asList(getNotSupportedModels()).contains(Build.MODEL);
         if (notSupportedDevice) {
-            new MaterialAlertDialogBuilder(this)
+            new AlertDialog.Builder(this)
                     .setTitle("알림")
                     .setMessage("제조사에서 필요한 기능을 제공하지 않는 모델입니다.")
                     .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
@@ -141,6 +110,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onAppGuideEvent(AppGuideEvent e) {
+        showAppGuide();
+    }
+
     PermissionFragment permissionFragment;
 
     private void showPermissionAlertBox() {
@@ -149,34 +123,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         permissionFragment.show(getSupportFragmentManager().beginTransaction(), PermissionFragment.TAG);
-
-//        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-//        alertDialog.setTitle("권한확인");
-//        alertDialog.setMessage("앱 구동에 필요한 권한 확인이 필요합니다.");
-//        alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                Intent intent = new Intent(this, SettingFragment.class);
-//                startActivity(intent);
-//                Snackbar.make(getRootView(), "Show Full Dialog Box", Snackbar.LENGTH_SHORT).show();
-//
-//            }
-//        });
-//        alertDialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dialog.dismiss();
-//            }
-//        });
-//        alertDialog.setCancelable(false);
-//        alertDialog.show();
     }
 
     private void showAppGuide() {
-        if (getSharedPref().getGuided()) {
-            return;
-        }
-
         if (appGuideFragment.isAdded() && appGuideFragment.isVisible()) {
             return;
         }
@@ -185,7 +134,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void dismissAppGuide() {
-//        appGuideFragment.show(getSupportFragmentManager().beginTransaction(), AppGuideFragment.TAG);
         getSupportFragmentManager().beginTransaction().hide(appGuideFragment);
     }
 

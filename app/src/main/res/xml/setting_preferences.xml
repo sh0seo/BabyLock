@@ -9,14 +9,14 @@
             app:key="setting_tap"
             app:title="화면잠금"
             app:summary="아기모드 상태에서 화면잠금 기능 사용"
-            app:icon="@drawable/ic_more_horiz_black_24dp"
+            app:icon="@drawable/ic_aspect_ratio_black_24dp"
             app:defaultValue="true"/>
 
         <SwitchPreferenceCompat
             app:key="setting_home"
             app:title="버튼잠금"
             app:summary="아기모드 상태에서 홈, 메뉴, 뒤로가기 버튼 기능을 잠금"
-            app:icon="@drawable/ic_more_horiz_black_24dp"
+            app:icon="@drawable/ic_home_black_24dp"
             app:defaultValue="true"/>
 
 <!--        <SeekBarPreference-->

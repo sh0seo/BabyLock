@@ -10,7 +10,10 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 
+import org.greenrobot.eventbus.EventBus;
+
 import io.animal.monkey.R;
+import io.animal.monkey.bus.events.AppGuideEvent;
 import io.animal.monkey.util.SharedPreferencesHelper;
 
 public class SettingFragment extends PreferenceFragmentCompat {
@@ -34,6 +37,15 @@ public class SettingFragment extends PreferenceFragmentCompat {
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 getSharedPref().setHomeOnBabyMode((boolean)newValue);
                 return true;
+            }
+        });
+
+        Preference information = getPreferenceScreen().findPreference("information");
+        information.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+            @Override
+            public boolean onPreferenceClick(Preference preference) {
+                EventBus.getDefault().post(new AppGuideEvent());
+                return false;
             }
         });
     }
