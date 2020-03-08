@@ -3,12 +3,6 @@
     <string name="app_name">\u0020BabyLock</string>
     <string name="app_version">1.0.0</string>
 
-    <string name="admob_app_id">ca-app-pub-2571675041295621~2009914968</string>
-    <string name="banner_ad_unit_id">ca-app-pub-2571675041295621/5865399497</string>
-    <string name="banner_ad_unit_id_for_test">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="banner_ad_unit_id_for_full_test">ca-app-pub-3940256099942544/1033173712</string>
-    <string name="admob_fail">광고 로드에 실패하였습니다.</string>
-
     <string name="baby_watch_mode">아기시청 모드</string>
     <string name="accessibility_service_description">아기시청 모드를 사용하기 위해서는 접근성 서비스에 대한 사용자 권한이 필요합니다. BabyLock 앱에서는 어떠한 개인 정보를 수집, 사용하지 않습니다.</string>
 

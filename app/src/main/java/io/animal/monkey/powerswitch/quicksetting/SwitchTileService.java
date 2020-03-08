@@ -11,7 +11,6 @@ import androidx.annotation.RequiresApi;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import io.animal.monkey.AdMobActivity;
 import io.animal.monkey.bus.events.TapServiceEvent;
 import io.animal.monkey.touch.TouchEventView;
 import io.animal.monkey.util.PermissionHelper;
@@ -101,11 +100,11 @@ public class SwitchTileService extends TileService {
     }
 
 
-    private Intent getAdMobActivityIntent() {
-        Intent intent = new Intent(getApplicationContext(), AdMobActivity.class);
+//    private Intent getAdMobActivityIntent() {
+//        Intent intent = new Intent(getApplicationContext(), AdMobActivity.class);
 //        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        return intent;
-    }
+//        return intent;
+//    }
 
     private void updateTile() {
         boolean hasAccessibility = getPermissionHelper().isAccessibilitySettingsOn();

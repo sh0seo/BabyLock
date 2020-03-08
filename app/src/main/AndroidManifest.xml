@@ -3,8 +3,6 @@
     package="io.animal.monkey">
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -25,18 +23,6 @@
                 android:resource="@xml/accessibility_service_config" />
         </service>
 
-<!--        <service-->
-<!--            android:name=".powerswitch.quicksetting.SwitchTileService"-->
-<!--            android:enabled="true"-->
-<!--            android:exported="true"-->
-<!--            android:icon="@drawable/ic_child_care_black_24dp"-->
-<!--            android:label="@string/baby_watch_mode"-->
-<!--            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.service.quicksettings.action.QS_TILE" />-->
-<!--            </intent-filter>-->
-<!--        </service>-->
-
         <activity android:name=".MainActivity"
             android:launchMode="singleTop">
             <intent-filter>
@@ -46,14 +32,6 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".AdMobActivity"
-            android:launchMode="singleTop"
-            android:theme="@style/Theme.AppCompat.NoActionBar">
-        </activity>
-
-        <meta-data
-            android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="@string/admob_app_id" />
     </application>
 
 </manifest>

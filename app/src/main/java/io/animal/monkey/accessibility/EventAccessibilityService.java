@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.CountDownTimer;
 import android.provider.Settings;
-import android.service.quicksettings.Tile;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.WindowManager;
@@ -16,7 +15,6 @@ import android.widget.Toast;
 
 import org.greenrobot.eventbus.EventBus;
 
-import io.animal.monkey.AdMobActivity;
 import io.animal.monkey.MainActivity;
 import io.animal.monkey.bus.events.KidModeEvent;
 import io.animal.monkey.bus.events.TapServiceEvent;
@@ -170,10 +168,11 @@ public class EventAccessibilityService extends AccessibilityService {
                 Toast.makeText(getApplicationContext(), "아기시청모드가 해제 되었습니다.", Toast.LENGTH_LONG).show();
 
                 // show MainActivity
-                Intent intent = new Intent(getBaseContext(), MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra(MainActivity.EXTRA_KEY, true);
-                startActivity(intent);
+//                Intent intent = new Intent(getBaseContext(), MainActivity.class);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                intent.putExtra(MainActivity.EXTRA_KEY, true);
+//                startActivity(intent);
+                onBabyModeOff();
             } else {
                 Toast.makeText(getApplicationContext(), "아기시청모드가 되었습니다.", Toast.LENGTH_LONG).show();
 
@@ -196,4 +195,9 @@ public class EventAccessibilityService extends AccessibilityService {
     }
 
     /// ---------------------------------------------------------------------------------- end timer
+
+    private void onBabyModeOff() {
+        EventBus.getDefault().post(new TapServiceEvent(false));
+        getSharedPref().setBabyMode(false);
+    }
 }
