@@ -7,9 +7,17 @@ import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.greenrobot.eventbus.EventBus;
@@ -20,6 +28,7 @@ import java.util.Arrays;
 
 import io.animal.monkey.bus.events.AlertBoxStatusEvent;
 import io.animal.monkey.bus.events.AppGuideEvent;
+import io.animal.monkey.bus.events.TapServiceEvent;
 import io.animal.monkey.setting.SettingFragment;
 import io.animal.monkey.ui.alert.PermissionFragment;
 import io.animal.monkey.ui.guide.AppGuideFragment;
@@ -28,6 +37,8 @@ import io.animal.monkey.util.SharedPreferencesHelper;
 
 public class MainActivity extends AppCompatActivity {
 
+    public final static String EXTRA_KEY = "EXTRA_KEY";
+    public final static String SHOW_ADMOB = "SHOW_ADMOB";
     private final static String TAG = "MainActivity";
 
     private SettingFragment settingFragment;
@@ -50,6 +61,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         EventBus.getDefault().register(this);
+
+        boolean isShowAdmob = getIntent().getBooleanExtra(EXTRA_KEY, false);
+        if (isShowAdmob) {
+            initializeAdMob();
+        }
     }
 
     @Override
@@ -172,69 +188,86 @@ public class MainActivity extends AppCompatActivity {
 
     /// -------------------------------------------------------------------------------------- AdMob
 
-//    // AdMob
-//    private InterstitialAd mInterstitialAd;
+    // AdMob
+    private InterstitialAd mInterstitialAd;
+
+    private void initializeAdMob() {
+        // Initialize the Mobile Ads SDK.
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {}
+        });
+
+        // Create the InterstitialAd and set the adUnitId.
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId(getString(R.string.banner_ad_unit_id_for_full_test));
+        mInterstitialAd.loadAd(new AdRequest.Builder().build());
+
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                // Code to be executed when an ad finishes loading.
+                Log.d(TAG, "onAdLoaded");
+
+                showInterstitial();
 //
-//    private void initializeAdMob() {
-//        // Initialize the Mobile Ads SDK.
-//        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-//            @Override
-//            public void onInitializationComplete(InitializationStatus initializationStatus) {}
-//        });
-//
-//        // Create the InterstitialAd and set the adUnitId.
-//        mInterstitialAd = new InterstitialAd(this);
-//        mInterstitialAd.setAdUnitId(getString(R.string.banner_ad_unit_id_for_full_test));
-//        mInterstitialAd.loadAd(new AdRequest.Builder().build());
-//
-//        mInterstitialAd.setAdListener(new AdListener() {
-//            @Override
-//            public void onAdLoaded() {
-//                // Code to be executed when an ad finishes loading.
-//                Log.d(TAG, "onAdLoaded");
-//            }
-//
-//            @Override
-//            public void onAdFailedToLoad(int errorCode) {
-//                // Code to be executed when an ad request fails.
-//                Log.d(TAG, "onAdFailedToLoad");
-//            }
-//
-//            @Override
-//            public void onAdOpened() {
-//                // Code to be executed when the ad is displayed.
-//                Log.d(TAG, "onAdOpended");
-//            }
-//
-//            @Override
-//            public void onAdClicked() {
-//                // Code to be executed when the user clicks on an ad.
-//                Log.d(TAG, "onAdClicked");
-//            }
-//
-//            @Override
-//            public void onAdLeftApplication() {
-//                // Code to be executed when the user has left the app.
-//                Log.d(TAG, "onAdLeftApplication");
-//            }
-//
-//            @Override
-//            public void onAdClosed() {
-//                Log.d(TAG, "onAdClosed");
-//
-//                // load next ad.
-//                mInterstitialAd.loadAd(new AdRequest.Builder().build());
-//
-//                // todo stop service
-//            }
-//        });
-//    }
-//
-//    private void showInterstitial() {
-//        if (mInterstitialAd != null && mInterstitialAd.isLoaded()) {
-//            mInterstitialAd.show();
-//        }
-//    }
+//                // request stop service delay 2000
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+                        onBabyModeOff();
+//                    }
+//                }, 1000);
+            }
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                // Code to be executed when an ad request fails.
+                Log.d(TAG, "onAdFailedToLoad");
+
+                onBabyModeOff();
+
+//                finish();
+                Toast.makeText(getApplicationContext(), getString(R.string.admob_fail), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onAdOpened() {
+                // Code to be executed when the ad is displayed.
+                Log.d(TAG, "onAdOpended");
+            }
+
+            @Override
+            public void onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+                Log.d(TAG, "onAdClicked");
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                // Code to be executed when the user has left the app.
+                Log.d(TAG, "onAdLeftApplication");
+            }
+
+            @Override
+            public void onAdClosed() {
+                Log.d(TAG, "onAdClosed");
+
+                onBabyModeOff();
+            }
+        });
+    }
+
+    private void showInterstitial() {
+        if (mInterstitialAd != null && mInterstitialAd.isLoaded()) {
+            mInterstitialAd.show();
+        }
+    }
 
     /// ---------------------------------------------------------------------------------- AdMob end
+
+    private void onBabyModeOff() {
+        EventBus.getDefault().post(new TapServiceEvent(false));
+        getSharedPref().setBabyMode(false);
+    }
 }

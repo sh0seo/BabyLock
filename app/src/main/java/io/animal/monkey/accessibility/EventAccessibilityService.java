@@ -17,6 +17,7 @@ import android.widget.Toast;
 import org.greenrobot.eventbus.EventBus;
 
 import io.animal.monkey.AdMobActivity;
+import io.animal.monkey.MainActivity;
 import io.animal.monkey.bus.events.KidModeEvent;
 import io.animal.monkey.bus.events.TapServiceEvent;
 import io.animal.monkey.touch.TouchEventView;
@@ -168,9 +169,10 @@ public class EventAccessibilityService extends AccessibilityService {
             if (getSharedPref().isBabyMode()) {
                 Toast.makeText(getApplicationContext(), "아기시청모드가 해제 되었습니다.", Toast.LENGTH_LONG).show();
 
-                // todo show AdMobActivity
-                Intent intent = new Intent(getBaseContext(), AdMobActivity.class);
+                // show MainActivity
+                Intent intent = new Intent(getBaseContext(), MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra(MainActivity.EXTRA_KEY, true);
                 startActivity(intent);
             } else {
                 Toast.makeText(getApplicationContext(), "아기시청모드가 되었습니다.", Toast.LENGTH_LONG).show();

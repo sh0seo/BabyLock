@@ -51,7 +51,7 @@ public class AdMobActivity extends AppCompatActivity {
 
         // Create the InterstitialAd and set the adUnitId.
         mInterstitialAd = new InterstitialAd(this);
-        mInterstitialAd.setAdUnitId(getString(R.string.banner_ad_unit_id_for_full_test));
+        mInterstitialAd.setAdUnitId(getString(R.string.banner_ad_unit_id));
         mInterstitialAd.loadAd(new AdRequest.Builder().build());
 
         mInterstitialAd.setAdListener(new AdListener() {
@@ -77,6 +77,8 @@ public class AdMobActivity extends AppCompatActivity {
                 Log.d(TAG, "onAdFailedToLoad");
 
                 onBabyModeOff();
+
+                finish();
             }
 
             @Override
